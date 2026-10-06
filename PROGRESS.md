@@ -234,4 +234,39 @@ All development phases are 100% complete, deployed, tested, and actively running
   - `frontend/components/layout/Navbar.tsx`
   - `PROGRESS.md`
 
+### Feature: Independent Dashboard Page with Dual-Option Authentication Modal
+- **Status:** COMPLETED
+- **Summary:**
+  - **Strict Separation of Routes**:
+    - **Landing Page (`/` / `LandingPage.tsx`)**: 100% standalone public showcase, zero dashboard code. Features hero with "Sign In" modal trigger, protocol value pillars, and featured masterpieces preview.
+    - **Dashboard Page (`/dashboard` / `DashboardPage.tsx`)**: Completely standalone route with protected route guard (auto-redirects unauthenticated visitors to `/`).
+  - **Dual-Option Authentication Flow (`AuthModal.tsx` & `AuthContext.tsx`)**:
+    - **Option A ("Connect to a Wallet")**: Real-time browser Web3 connection (MetaMask, Coinbase, WalletConnect).
+    - **Option B ("Demo Wallet")**: Sandbox credentials form with Full Name, Email, and Access PIN inputs, plus 1-click **"Auto-fill Demo Credentials"** button.
+    - **Connection & Redirection**: Assigns sandbox wallet address (`0x71C8573...894B`), saves profile to `AuthContext` and `localStorage`, displays *"Demo Wallet Connected"* toast, and programmatically navigates to `/dashboard`.
+  - **Standard Clean User Account (No Complex Roles)**:
+    - Removed all confusing role hierarchies (Artist, Gallery, Restorer, etc.) in favor of a standard, high-end collector/curator profile.
+  - **Strict Light Gallery Mode Only**:
+    - Elegant, gallery-grade light theme across all pages (`#ffffff` white backgrounds, `#f8fafc` soft stone surfaces, `border-slate-200` borders, `text-slate-900` typography). Dark mode removed.
+  - **Standalone Dashboard Page Features (`/dashboard`)**:
+    - **Header**: Connected user Name, Email, truncated address pill (`0x71C...894B`), and clear **"Sign Out / Disconnect"** button (clears session and returns to `/`).
+    - **4 Account Summary Cards**: Total Artworks Owned (`4 Masterpieces`), Verified Items (`100% Authentic`), Wallet Balance (`2.45 ETH`), Total Transactions (`12 Recorded`).
+    - **Quick Actions**: "Register Artwork", "Verify Authenticity", "Transaction History" modal.
+    - **Collection & Activity Grid**: Light-themed cards showcasing user's registered pieces with SHA-256 digests and provenance records.
+- **Key Files Created/Modified:**
+  - `frontend/context/AuthContext.tsx`
+  - `frontend/components/auth/AuthContext.tsx`
+  - `frontend/components/auth/AuthModal.tsx`
+  - `frontend/components/landing/LandingPage.tsx`
+  - `frontend/app/page.tsx`
+  - `frontend/components/dashboard/DashboardPage.tsx`
+  - `frontend/app/dashboard/page.tsx`
+  - `frontend/lib/providers.tsx`
+  - `frontend/components/layout/Navbar.tsx`
+  - `frontend/components/layout/MobileDrawer.tsx`
+  - `frontend/components/layout/Footer.tsx`
+  - `frontend/app/layout.tsx`
+  - `PROGRESS.md`
+
+
 

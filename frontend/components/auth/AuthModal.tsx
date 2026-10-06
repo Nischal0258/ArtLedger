@@ -1,269 +1,294 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAccount } from "wagmi";
 import { useConnectModal } from "@rainbow-me/rainbowkit";
-import { toast } from "sonner";
+import { useAccount } from "wagmi";
 import {
   X,
-  Sparkles,
-  ShieldCheck,
   Wallet,
   ArrowRight,
-  Palette,
-  Landmark,
-  Hammer,
-  BadgeDollarSign,
-  ShieldAlert,
-  ChevronDown,
-  Layers,
+  ArrowLeft,
+  Sparkles,
+  ShieldCheck,
+  User,
+  Mail,
+  Lock,
   Zap,
+  CheckCircle2,
 } from "lucide-react";
-import { useDemoWallet, DEMO_PERSONAS, DemoPersona } from "@/lib/demoWallet";
+import { useAuth } from "@/context/AuthContext";
 
-interface AuthModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  initialMode?: "login" | "signup";
-}
-
-export function AuthModal({
-  isOpen,
-  onClose,
-  initialMode = "login",
-}: AuthModalProps) {
+export function AuthModal() {
   const router = useRouter();
-  const { isConnected: isRealConnected } = useAccount();
+  const { isAuthModalOpen, closeAuthModal, loginWithDemo, loginWithWallet } = useAuth();
   const { openConnectModal } = useConnectModal();
-  const {
-    isDemoMode,
-    activePersona,
-    connectDemoWallet,
-    switchDemoPersona,
-    disconnectDemoWallet,
-  } = useDemoWallet();
+  const { address: wagmiAddress, isConnected: isWagmiConnected } = useAccount();
 
-  const [mode, setMode] = useState<"login" | "signup">(initialMode);
-  const [showPersonaPicker, setShowPersonaPicker] = useState(false);
-  const [selectedPersonaId, setSelectedPersonaId] = useState("admin");
+  // Step state: "select" (Method Selection) vs "demo-form" (Demo Wallet Credentials)
+  const [step, setStep] = useState<"select" | "demo-form">("select");
 
-  useEffect(() => {
-    setMode(initialMode);
-  }, [initialMode]);
+  // Form input state
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // When connection succeeds while modal is open, congratulate and close
-  useEffect(() => {
-    if (isRealConnected && isOpen) {
-      toast.success("Signed in successfully! Redirecting to Curator Dashboard...");
-      onClose();
-      window.location.href = "/dashboard";
-    }
-  }, [isRealConnected, isOpen, onClose]);
+  if (!isAuthModalOpen) return null;
 
-  if (!isOpen) return null;
+  const handleClose = () => {
+    setStep("select");
+    closeAuthModal();
+  };
 
-  const handleWalletConnect = () => {
+  // Option A: Real Web3 Wallet
+  const handleConnectWeb3 = () => {
     if (openConnectModal) {
       openConnectModal();
-    } else {
-      toast.error("Wallet connector initializing, please try again in a moment.");
+    } else if (isWagmiConnected && wagmiAddress) {
+      loginWithWallet(wagmiAddress);
     }
   };
 
-  const handleDemoSignIn = (personaId: string) => {
-    connectDemoWallet(personaId);
-    onClose();
-    window.location.href = "/dashboard";
+  // Auto-fill demo credentials convenience feature
+  const handleAutofill = () => {
+    setName("Alex Morgan");
+    setEmail("alex@example.com");
+    setPassword("demo2026pin");
   };
 
-  const selectedPersona =
-    DEMO_PERSONAS.find((p) => p.id === selectedPersonaId) || DEMO_PERSONAS[0];
-
-  const getPersonaIcon = (iconName: string) => {
-    switch (iconName) {
-      case "ShieldAlert":
-        return <ShieldAlert className="w-4 h-4 text-amber-500" />;
-      case "Landmark":
-        return <Landmark className="w-4 h-4 text-blue-500" />;
-      case "Hammer":
-        return <Hammer className="w-4 h-4 text-emerald-500" />;
-      case "BadgeDollarSign":
-        return <BadgeDollarSign className="w-4 h-4 text-yellow-500" />;
-      case "Palette":
-        return <Palette className="w-4 h-4 text-purple-500" />;
-      default:
-        return <Sparkles className="w-4 h-4 text-brand-500" />;
+  // Option B: Demo Wallet Submit
+  const handleDemoSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      await loginWithDemo({
+        name: name.trim() || "Alex Morgan",
+        email: email.trim() || "alex@example.com",
+        password,
+      });
+      handleClose();
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
+      {/* High-end clean backdrop */}
       <div
-        className="fixed inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
-        onClick={onClose}
+        className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm transition-opacity"
+        onClick={handleClose}
       />
 
-      {/* Modal Dialog Card */}
-      <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl p-6 sm:p-8 z-10 animate-fade-in space-y-6 max-h-[92vh] overflow-y-auto">
-        {/* Header */}
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-gradient-to-tr from-brand-600 to-brand-400 text-white flex items-center justify-center shadow-md shadow-brand-500/25">
-              <ShieldCheck className="w-5 h-5" />
-            </div>
-            <div>
-              <h3 className="font-extrabold text-lg text-slate-900 dark:text-white leading-none">
-                ArtLedger
-              </h3>
-              <p className="text-[11px] text-brand-600 dark:text-brand-400 font-semibold uppercase tracking-wider mt-1">
-                Provenance Protocol
-              </p>
-            </div>
+      {/* Light Gallery Modal Card */}
+      <div className="relative w-full max-w-md bg-white border border-slate-200 rounded-2xl shadow-2xl p-6 sm:p-8 z-10 animate-fade-in text-slate-900">
+        {/* Close Button */}
+        <button
+          onClick={handleClose}
+          type="button"
+          className="absolute top-5 right-5 p-1.5 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 transition-colors"
+          aria-label="Close modal"
+        >
+          <X className="w-5 h-5" />
+        </button>
+
+        {/* Modal Header */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-md shadow-indigo-500/20">
+            <ShieldCheck className="w-5 h-5" />
           </div>
-          <button
-            onClick={onClose}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-700 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div>
+            <h3 className="font-extrabold text-xl text-slate-900 leading-tight">
+              Sign In to ArtLedger
+            </h3>
+            <p className="text-xs text-slate-500 font-medium">
+              Access your fine art collection & verification registry
+            </p>
+          </div>
         </div>
 
-        {/* Tab Switcher: Sign In vs Sign Up */}
-        <div className="flex rounded-xl bg-slate-100 dark:bg-slate-800 p-1">
-          <button
-            type="button"
-            onClick={() => setMode("login")}
-            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
-              mode === "login"
-                ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
-                : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-            }`}
-          >
-            Sign In
-          </button>
-          <button
-            type="button"
-            onClick={() => setMode("signup")}
-            className={`flex-1 py-2 text-xs font-bold rounded-lg transition-all ${
-              mode === "signup"
-                ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-sm"
-                : "text-slate-500 hover:text-slate-900 dark:hover:text-white"
-            }`}
-          >
-            Create Account
-          </button>
-        </div>
+        {/* STEP 1: INITIAL METHOD SELECTION */}
+        {step === "select" && (
+          <div className="space-y-4">
+            <p className="text-xs text-slate-600 leading-relaxed">
+              Choose your preferred authentication method to continue to the platform:
+            </p>
 
-        {/* ================= VIRTUAL DEMO WALLET (FEATURED) ================= */}
-        <div className="rounded-2xl border-2 border-brand-500/30 bg-gradient-to-b from-brand-500/10 via-brand-500/5 to-transparent p-4 sm:p-5 space-y-4 shadow-sm">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <span className="text-xl">🎭</span>
-              <div>
-                <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
-                  <span>Virtual Demo Wallet</span>
-                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-semibold border border-emerald-500/20">
-                    Recommended
-                  </span>
-                </h4>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">
-                  Instant sign in without MetaMask or browser extensions
-                </p>
+            {/* Option A: Connect to a Wallet */}
+            <div className="p-4 rounded-xl border border-slate-200 bg-white hover:border-indigo-500/50 hover:bg-slate-50/60 transition-all shadow-sm group">
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-50 text-indigo-600 flex items-center justify-center">
+                    <Wallet className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-sm text-slate-900">
+                      Connect to a Wallet
+                    </h4>
+                    <span className="text-[11px] text-slate-500">
+                      MetaMask, Coinbase Wallet, WalletConnect
+                    </span>
+                  </div>
+                </div>
               </div>
+
+              <p className="text-xs text-slate-500 mb-3 leading-relaxed">
+                Connect your real Web3 browser extension to sign on-chain transactions and manage your art portfolio.
+              </p>
+
+              <button
+                type="button"
+                onClick={handleConnectWeb3}
+                className="w-full py-2.5 px-4 rounded-xl bg-slate-900 hover:bg-slate-800 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-colors shadow-sm"
+              >
+                <span>Connect Browser Wallet</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Divider */}
+            <div className="relative flex items-center justify-center my-2">
+              <div className="w-full border-t border-slate-200" />
+              <span className="absolute px-3 bg-white text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+                Or Instant Access
+              </span>
+            </div>
+
+            {/* Option B: Demo Wallet */}
+            <div className="p-4 rounded-xl border-2 border-indigo-100 bg-indigo-50/40 hover:bg-indigo-50/70 transition-all shadow-sm">
+              <div className="flex items-start justify-between gap-3 mb-2">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center shadow-sm">
+                    <Sparkles className="w-4 h-4" />
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h4 className="font-bold text-sm text-slate-900">
+                        Demo Wallet
+                      </h4>
+                      <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-indigo-600 text-white">
+                        Recommended
+                      </span>
+                    </div>
+                    <span className="text-[11px] text-indigo-600 font-medium">
+                      Sandbox wallet — No browser extension required
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-xs text-slate-600 mb-3 leading-relaxed">
+                Explore the complete dashboard, browse verified art, and test provenance features instantly without installing MetaMask.
+              </p>
+
+              <button
+                type="button"
+                onClick={() => setStep("demo-form")}
+                className="w-full py-2.5 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-semibold flex items-center justify-center gap-2 transition-all shadow-md shadow-indigo-600/20"
+              >
+                <span>Continue with Demo Wallet</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
             </div>
           </div>
+        )}
 
-          {/* Quick Persona Selector Dropdown / Grid */}
-          <div className="space-y-2">
-            <label className="text-[11px] font-bold text-slate-600 dark:text-slate-300 block">
-              Select Demo Curator Persona:
-            </label>
-            <div className="grid grid-cols-1 gap-2">
-              {DEMO_PERSONAS.map((persona) => {
-                const isSelected = selectedPersonaId === persona.id;
-                return (
-                  <button
-                    key={persona.id}
-                    type="button"
-                    onClick={() => setSelectedPersonaId(persona.id)}
-                    className={`flex items-start gap-3 p-2.5 rounded-xl border text-left transition-all ${
-                      isSelected
-                        ? "border-brand-500 bg-white dark:bg-slate-800 shadow-sm ring-1 ring-brand-500"
-                        : "border-slate-200/80 dark:border-slate-700/60 bg-white/60 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-850"
-                    }`}
-                  >
-                    <div className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 shrink-0 mt-0.5">
-                      {getPersonaIcon(persona.iconName)}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between gap-1">
-                        <span className="font-bold text-xs text-slate-900 dark:text-white truncate">
-                          {persona.name}
-                        </span>
-                        <span className="text-[10px] font-mono text-slate-400">
-                          {persona.roleName}
-                        </span>
-                      </div>
-                      <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">
-                        {persona.description}
-                      </p>
-                    </div>
-                  </button>
-                );
-              })}
+        {/* STEP 2: DEMO WALLET CREDENTIAL FORM */}
+        {step === "demo-form" && (
+          <form onSubmit={handleDemoSubmit} className="space-y-4">
+            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+              <button
+                type="button"
+                onClick={() => setStep("select")}
+                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-slate-800 transition-colors"
+              >
+                <ArrowLeft className="w-3.5 h-3.5" />
+                <span>Back to Options</span>
+              </button>
+
+              <button
+                type="button"
+                onClick={handleAutofill}
+                className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-indigo-50 text-indigo-600 hover:bg-indigo-100 text-[11px] font-bold transition-colors"
+              >
+                <Zap className="w-3 h-3" />
+                <span>Auto-fill Demo Credentials</span>
+              </button>
             </div>
-          </div>
 
-          {/* Connect Demo Wallet CTA */}
-          <button
-            onClick={() => handleDemoSignIn(selectedPersonaId)}
-            type="button"
-            className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2 group transition-all"
-          >
-            <Zap className="w-4 h-4 fill-white" />
-            <span>
-              {mode === "login" ? "Sign In as " : "Create Account as "}
-              {selectedPersona.name} ({selectedPersona.roleName})
-            </span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-          </button>
-        </div>
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                <User className="w-3.5 h-3.5 text-slate-400" />
+                <span>Full Name *</span>
+              </label>
+              <input
+                type="text"
+                required
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="Alex Morgan"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-medium"
+              />
+            </div>
 
-        {/* Divider with 'OR' */}
-        <div className="relative flex items-center justify-center">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-slate-200 dark:border-slate-800" />
-          </div>
-          <span className="relative px-3 bg-white dark:bg-slate-900 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
-            Or Real Web3 Wallet
-          </span>
-        </div>
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                <Mail className="w-3.5 h-3.5 text-slate-400" />
+                <span>Email Address *</span>
+              </label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="alex@example.com"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-medium"
+              />
+            </div>
 
-        {/* Real Web3 Wallet Connect Option */}
-        <div className="space-y-3">
-          <button
-            onClick={handleWalletConnect}
-            type="button"
-            className="w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold text-xs transition-all flex items-center justify-center gap-2"
-          >
-            <Wallet className="w-4 h-4 text-slate-500" />
-            <span>Connect Web3 Wallet (MetaMask, Coinbase, Rainbow)</span>
-          </button>
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-slate-700 flex items-center gap-1.5">
+                <Lock className="w-3.5 h-3.5 text-slate-400" />
+                <span>Password / Access PIN *</span>
+              </label>
+              <input
+                type="password"
+                required
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 bg-slate-50 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-medium"
+              />
+            </div>
 
-          <p className="text-[11px] text-center text-slate-400 leading-relaxed">
-            {mode === "login"
-              ? "Zero-trust blockchain authentication. Your cryptographic signature verifies your curator identity on Ethereum."
-              : "Registering connects your Ethereum address as a verified provenance node on ArtLedger."}
-          </p>
-        </div>
+            {/* Simulated Address Pill */}
+            <div className="p-3 rounded-xl bg-slate-50 border border-slate-200 text-xs flex items-center justify-between">
+              <div className="space-y-0.5">
+                <span className="text-[10px] uppercase font-bold text-slate-400 block">
+                  Assigned Sandbox Address
+                </span>
+                <span className="font-mono text-slate-700 font-semibold text-[11px]">
+                  0x71C8573...894B
+                </span>
+              </div>
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-100 text-emerald-700 flex items-center gap-1">
+                <CheckCircle2 className="w-3 h-3" />
+                Ready
+              </span>
+            </div>
 
-        {/* Local Testnet Hint */}
-        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-[10px] text-slate-400 text-center flex items-center justify-center gap-2">
-          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-          <span>Local Hardhat Node Active (Chain ID 31337)</span>
-        </div>
+            {/* Action Button: Connect Wallet */}
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full py-3 px-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-xs sm:text-sm font-bold flex items-center justify-center gap-2 transition-all shadow-md shadow-indigo-600/20 disabled:opacity-50 mt-2"
+            >
+              <Wallet className="w-4 h-4" />
+              <span>{isSubmitting ? "Connecting..." : "Connect Wallet"}</span>
+            </button>
+          </form>
+        )}
       </div>
     </div>
   );
