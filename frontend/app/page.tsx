@@ -1,8 +1,32 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { ShieldCheck, Sparkles, ArrowRight, Layers, FileSearch, ShieldAlert } from "lucide-react";
+import { useAccount } from "wagmi";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
+import {
+  ShieldCheck,
+  Sparkles,
+  ArrowRight,
+  Layers,
+  FileSearch,
+  Lock,
+  LayoutDashboard,
+  Compass,
+  CheckCircle2,
+  Palette,
+  Shield,
+  Fingerprint,
+} from "lucide-react";
 
 export default function HomePage() {
+  const { isConnected } = useAccount();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
     <div className="flex-1 flex flex-col">
       {/* Hero Section */}
@@ -12,7 +36,7 @@ export default function HomePage() {
           <span>Next-Gen Provenance & Authenticity Protocol</span>
         </div>
 
-        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight max-w-4xl mx-auto leading-tight sm:leading-tight mb-6">
+        <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight max-w-4xl mx-auto leading-tight sm:leading-tight mb-6 text-slate-900 dark:text-white">
           Immutable On-Chain History for the World&apos;s Finest Art
         </h1>
 
@@ -20,19 +44,39 @@ export default function HomePage() {
           Combat art forgery with cryptographic SHA-256 verification, ERC-721 ownership tokens, and role-gated provenance logs created exclusively by certified institutions.
         </p>
 
+        {/* Dynamic CTAs: Differentiates Guests vs Authenticated Curators */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto mb-16">
-          <Link
-            href="/mint"
-            className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-all shadow-xl shadow-brand-500/25 flex items-center justify-center gap-2"
-          >
-            Register Artwork
-            <ArrowRight className="w-4 h-4" />
-          </Link>
+          {mounted && isConnected ? (
+            <Link
+              href="/dashboard"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-all shadow-xl shadow-brand-500/25 flex items-center justify-center gap-2"
+            >
+              <LayoutDashboard className="w-4 h-4" />
+              <span>Go to Curator Dashboard</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          ) : (
+            <ConnectButton.Custom>
+              {({ openConnectModal }) => (
+                <button
+                  onClick={openConnectModal}
+                  type="button"
+                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-all shadow-xl shadow-brand-500/25 flex items-center justify-center gap-2"
+                >
+                  <Sparkles className="w-4 h-4" />
+                  <span>Launch App / Sign In</span>
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              )}
+            </ConnectButton.Custom>
+          )}
+
           <Link
             href="/explore"
-            className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-slate-300 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 font-semibold transition-colors flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-6 py-3.5 rounded-xl border border-slate-300 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 font-semibold transition-colors flex items-center justify-center gap-2 text-slate-800 dark:text-slate-200"
           >
-            Explore Gallery
+            <Compass className="w-4 h-4" />
+            <span>Explore Public Ledger</span>
           </Link>
         </div>
 
@@ -57,14 +101,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Value Pillars */}
+      {/* Protocol Architecture Value Pillars */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full border-t border-slate-200 dark:border-slate-800">
+        <div className="text-center max-w-2xl mx-auto mb-12">
+          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white mb-3">
+            Built for Institutional Trust & Provenance
+          </h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            A three-tier cryptographic security model ensuring physical art cannot be forged, duplicated, or misattributed.
+          </p>
+        </div>
+
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="p-6 rounded-2xl border border-slate-200 dark:border-slate-800/80 bg-white/40 dark:bg-slate-900/40">
             <div className="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center mb-4">
               <ShieldCheck className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold mb-2">Cryptographic Binding</h3>
+            <h3 className="text-lg font-bold mb-2 text-slate-900 dark:text-white">Cryptographic Binding</h3>
             <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               Every artwork file is hashed client-side before upload. The resulting SHA-256 fingerprint is permanently sealed into the token contract.
             </p>
@@ -74,7 +127,7 @@ export default function HomePage() {
             <div className="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center mb-4">
               <Layers className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold mb-2">Multi-Curator Timeline</h3>
+            <h3 className="text-lg font-bold mb-2 text-slate-900 dark:text-white">Multi-Curator Timeline</h3>
             <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
               Approved Galleries, Restorers, and Appraisers append immutable events for every exhibition, conditioning treatment, or audit.
             </p>
@@ -84,10 +137,53 @@ export default function HomePage() {
             <div className="w-12 h-12 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-4">
               <FileSearch className="w-6 h-6" />
             </div>
-            <h3 className="text-lg font-bold mb-2">Zero-Trust Verification</h3>
+            <h3 className="text-lg font-bold mb-2 text-slate-900 dark:text-white">Zero-Trust Verification</h3>
             <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Anyone can upload an artwork photo to cross-reference against the on-chain registry, catching altered copies or forged replicas instantly.
+              Authenticate physical pieces by cross-referencing high-resolution images against the on-chain registry, catching altered copies instantly.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Curator Dashboard Call to Action Banner */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
+        <div className="rounded-3xl p-8 sm:p-12 border border-slate-200 dark:border-slate-800 bg-gradient-to-tr from-slate-100 to-slate-50 dark:from-slate-900 dark:to-slate-950 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
+          <div className="space-y-3 text-center md:text-left max-w-xl">
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 text-xs font-semibold">
+              <Lock className="w-3.5 h-3.5" />
+              <span>Institutional Curator Portal</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
+              Ready to Access Your Curator Tools?
+            </h2>
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
+              Genesis artwork registration, cryptographic hash verifiers, custody logging, and administrative controls are securely housed inside the Curator Dashboard.
+            </p>
+          </div>
+
+          <div>
+            {mounted && isConnected ? (
+              <Link
+                href="/dashboard"
+                className="px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-all shadow-lg shadow-brand-500/25 flex items-center gap-2 text-sm"
+              >
+                <LayoutDashboard className="w-4 h-4" />
+                <span>Enter Curator Dashboard</span>
+              </Link>
+            ) : (
+              <ConnectButton.Custom>
+                {({ openConnectModal }) => (
+                  <button
+                    onClick={openConnectModal}
+                    type="button"
+                    className="px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-all shadow-lg shadow-brand-500/25 flex items-center gap-2 text-sm"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    <span>Connect Wallet to Sign In</span>
+                  </button>
+                )}
+              </ConnectButton.Custom>
+            )}
           </div>
         </div>
       </section>

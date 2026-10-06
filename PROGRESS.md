@@ -84,3 +84,29 @@ All development phases are 100% complete, deployed, tested, and actively running
   - `blockchain/scripts/seed-demo.js`
   - `DEMO_SCRIPT.md`
   - `frontend/lib/contract.ts`
+
+### Architectural Refinement: Authenticated Curator Dashboard & Public Guest Isolation
+- **Status:** COMPLETED
+- **Summary:**
+  - Implemented `frontend/components/auth/AuthGate.tsx` to protect institutional actions from unauthenticated guests with an institutional lock gate and Web3 login button.
+  - Built unified `frontend/app/dashboard/page.tsx` (Curator Command Center) housing:
+    - Register Artwork wizard launch card
+    - Forensic Hash Verifier launch card
+    - Curator Role Admin portal (admin-gated)
+    - Full artwork collection view & institutional permission matrix
+  - Gated `/mint`, `/verify`, `/admin`, and `/profile` with `AuthGate` and back-to-dashboard breadcrumbs.
+  - Cleaned up Landing Page (`app/page.tsx`): removed raw curator action buttons (`/mint`, `/verify`, `/admin`), replaced with dynamic "Launch App / Sign In" and "Go to Curator Dashboard" CTAs.
+  - Cleaned up `Navbar.tsx` & `MobileDrawer.tsx`: guests only see public links (Explore Gallery, How It Works) and Sign In button. Authenticated users see Dashboard, Curator Role badges, and connected account pills.
+  - Cleaned up `Footer.tsx` to point to Curator Dashboard instead of raw action routes.
+  - Verified static production build compiling all 12 routes with 0 errors.
+- **Key Files Created/Modified:**
+  - `frontend/components/auth/AuthGate.tsx`
+  - `frontend/app/dashboard/page.tsx`
+  - `frontend/app/page.tsx`
+  - `frontend/components/layout/Navbar.tsx`
+  - `frontend/components/layout/MobileDrawer.tsx`
+  - `frontend/components/layout/Footer.tsx`
+  - `frontend/app/mint/page.tsx`
+  - `frontend/app/verify/page.tsx`
+  - `frontend/app/admin/page.tsx`
+  - `frontend/app/profile/page.tsx`

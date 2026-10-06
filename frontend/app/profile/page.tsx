@@ -11,6 +11,7 @@ import {
   Layers,
   Sparkles,
   ArrowRight,
+  ArrowLeft,
   Wallet,
   CheckCircle2,
 } from "lucide-react";
@@ -21,6 +22,7 @@ import { AddressPill } from "@/components/ui/AddressPill";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ArtworkCard } from "@/components/artwork/ArtworkCard";
+import { AuthGate } from "@/components/auth/AuthGate";
 
 export default function ProfilePage() {
   const { address, isConnected } = useAccount();
@@ -39,22 +41,25 @@ export default function ProfilePage() {
   const totalSupply = totalSupplyData !== undefined ? Number(totalSupplyData) : 0;
   const allIds = Array.from({ length: totalSupply }, (_, i) => i);
 
-  if (!isConnected) {
-    return (
-      <div className="max-w-4xl mx-auto px-4 py-20">
-        <EmptyState
-          icon={<Wallet className="w-8 h-8 text-brand-500" />}
-          title="Connect Wallet"
-          description="Please connect your Web3 wallet to access your artist portfolio, institutional curator badges, and logged activity."
-        />
-      </div>
-    );
-  }
-
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
-      {/* Profile Header Card */}
-      <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm p-6 sm:p-8 space-y-6">
+    <AuthGate
+      title="Curator Portfolio Access"
+      description="Connect your Web3 wallet to access your artist credentials, registered fine art collection, and institutional permissions."
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
+        {/* Navigation Breadcrumb */}
+        <div>
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to Curator Dashboard</span>
+          </Link>
+        </div>
+
+        {/* Profile Header Card */}
+        <div className="rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm p-6 sm:p-8 space-y-6">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div className="flex items-center gap-4">
             <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-brand-600 to-brand-400 text-white flex items-center justify-center font-bold text-2xl shadow-lg shadow-brand-500/20">
@@ -198,6 +203,7 @@ export default function ProfilePage() {
           </div>
         )}
       </div>
-    </div>
+      </div>
+    </AuthGate>
   );
 }

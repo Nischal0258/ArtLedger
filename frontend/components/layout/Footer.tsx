@@ -54,18 +54,18 @@ export function Footer() {
 
         {/* Footer Navigation & Copyright */}
         <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-[11px]">
-          <div className="flex items-center gap-6">
+          <div className="flex flex-wrap items-center gap-6">
             <Link href="/explore" className="hover:text-slate-900 dark:hover:text-white transition-colors">
               Explore Gallery
             </Link>
-            <Link href="/mint" className="hover:text-slate-900 dark:hover:text-white transition-colors">
-              Register Artwork
-            </Link>
-            <Link href="/verify" className="hover:text-slate-900 dark:hover:text-white transition-colors">
-              Verify Hash
+            <Link href="/dashboard" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+              Curator Dashboard
             </Link>
             <Link href="/how-it-works" className="hover:text-slate-900 dark:hover:text-white transition-colors">
               How It Works
+            </Link>
+            <Link href="/settings" className="hover:text-slate-900 dark:hover:text-white transition-colors">
+              Diagnostics
             </Link>
           </div>
 

@@ -3,7 +3,20 @@
 import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { X, Palette, Compass, ShieldCheck, HelpCircle, Shield, User, Sun, Moon } from "lucide-react";
+import {
+  X,
+  Palette,
+  Compass,
+  ShieldCheck,
+  HelpCircle,
+  Shield,
+  User,
+  Sun,
+  Moon,
+  LayoutDashboard,
+  Sparkles,
+} from "lucide-react";
+import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { useTheme } from "@/lib/providers";
 import { useUserRole } from "@/hooks/useUserRole";
 import { RoleBadge } from "@/components/ui/RoleBadge";
@@ -20,14 +33,20 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
 
   if (!isOpen) return null;
 
-  const navLinks = [
-    { href: "/explore", label: "Explore Gallery", icon: Compass },
-    { href: "/mint", label: "Register Artwork", icon: Palette },
-    { href: "/verify", label: "Verify Authenticity", icon: ShieldCheck },
-    { href: "/how-it-works", label: "How It Works", icon: HelpCircle },
-    ...(isConnected ? [{ href: "/profile", label: "My Profile", icon: User }] : []),
-    ...(isDefaultAdmin ? [{ href: "/admin", label: "Curator Admin", icon: Shield }] : []),
-  ];
+  // Strict separation of guest vs curator links
+  const navLinks = isConnected
+    ? [
+        { href: "/dashboard", label: "Curator Dashboard", icon: LayoutDashboard },
+        { href: "/explore", label: "Explore Gallery", icon: Compass },
+        { href: "/mint", label: "Register Artwork", icon: Palette },
+        { href: "/verify", label: "Verify Authenticity", icon: ShieldCheck },
+        { href: "/how-it-works", label: "How It Works", icon: HelpCircle },
+        ...(isDefaultAdmin ? [{ href: "/admin", label: "Curator Admin", icon: Shield }] : []),
+      ]
+    : [
+        { href: "/explore", label: "Explore Gallery", icon: Compass },
+        { href: "/how-it-works", label: "How It Works", icon: HelpCircle },
+      ];
 
   return (
     <div className="fixed inset-0 z-50 lg:hidden flex">
@@ -80,6 +99,26 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
               );
             })}
           </nav>
+
+          {!isConnected && (
+            <div className="pt-2">
+              <ConnectButton.Custom>
+                {({ openConnectModal }) => (
+                  <button
+                    onClick={() => {
+                      onClose();
+                      openConnectModal();
+                    }}
+                    type="button"
+                    className="w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs shadow-md shadow-brand-500/25 flex items-center justify-center gap-2"
+                  >
+                    <Sparkles className="w-4 h-4" />
+                    <span>Sign In / Connect Wallet</span>
+                  </button>
+                )}
+              </ConnectButton.Custom>
+            </div>
+          )}
         </div>
 
         {/* Bottom Theme & Quick Controls */}

@@ -12,6 +12,7 @@ import {
   Palette,
   ShieldAlert,
   ArrowRight,
+  ArrowLeft,
   FileCheck2,
   Image as ImageIcon,
   Lock,
@@ -24,6 +25,7 @@ import { truncateHash } from "@/lib/formatters";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { RoleBadge } from "@/components/ui/RoleBadge";
+import { AuthGate } from "@/components/auth/AuthGate";
 
 export default function MintPage() {
   const { isConnected } = useAccount();
@@ -130,20 +132,35 @@ export default function MintPage() {
   const canMint = isArtist || isDefaultAdmin;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
-      {/* Page Header */}
-      <div className="mb-10 text-center sm:text-left">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 text-purple-500 border border-purple-500/20 text-xs font-semibold mb-3">
-          <Palette className="w-3.5 h-3.5" />
-          <span>Artist Registry Portal</span>
+    <AuthGate
+      title="Artist Registration Portal"
+      description="Registering an artwork on the ledger requires an authenticated Web3 session with verified Artist credentials."
+    >
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16">
+        {/* Navigation Breadcrumb */}
+        <div className="mb-6">
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to Curator Dashboard</span>
+          </Link>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
-          Register New Artwork
-        </h1>
-        <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
-          Mint an ERC-721 provenance token permanently binding the artist&apos;s identity, physical dimensions, and cryptographic SHA-256 media fingerprint.
-        </p>
-      </div>
+
+        {/* Page Header */}
+        <div className="mb-10 text-center sm:text-left">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 text-purple-500 border border-purple-500/20 text-xs font-semibold mb-3">
+            <Palette className="w-3.5 h-3.5" />
+            <span>Artist Registry Portal</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-3">
+            Register New Artwork
+          </h1>
+          <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
+            Mint an ERC-721 provenance token permanently binding the artist&apos;s identity, physical dimensions, and cryptographic SHA-256 media fingerprint.
+          </p>
+        </div>
 
       {/* Role Check Warning */}
       {isConnected && !canMint && (
@@ -415,6 +432,7 @@ export default function MintPage() {
           </div>
         </div>
       )}
-    </div>
+      </div>
+    </AuthGate>
   );
 }

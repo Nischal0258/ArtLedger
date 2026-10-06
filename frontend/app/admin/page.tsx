@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useAccount, useWriteContract, useWaitForTransactionReceipt } from "wagmi";
 import { isAddress } from "viem";
 import { toast } from "sonner";
+import Link from "next/link";
 import {
   ShieldAlert,
   ShieldCheck,
@@ -15,11 +16,13 @@ import {
   Hammer,
   BadgeDollarSign,
   Shield,
+  ArrowLeft,
 } from "lucide-react";
 import { ARTLEDGER_ADDRESS, ARTLEDGER_ABI } from "@/lib/contract";
 import { useUserRole } from "@/hooks/useUserRole";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { RoleBadge } from "@/components/ui/RoleBadge";
+import { AuthGate } from "@/components/auth/AuthGate";
 
 export default function AdminPage() {
   const { isConnected } = useAccount();
@@ -84,20 +87,35 @@ export default function AdminPage() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
-      {/* Header */}
-      <div>
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20 text-xs font-semibold mb-3">
-          <Shield className="w-3.5 h-3.5" />
-          <span>Institutional Governance</span>
+    <AuthGate
+      title="Administrator Console"
+      description="This portal is restricted to the ArtLedger contract administrator to manage institutional credentials."
+    >
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
+        {/* Navigation Breadcrumb */}
+        <div>
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to Curator Dashboard</span>
+          </Link>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">
-          Curator Role Management
-        </h1>
-        <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
-          Admin portal to grant verified credentials to Artists, Galleries, Conservators, and Certified Appraisers.
-        </p>
-      </div>
+
+        {/* Header */}
+        <div>
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 text-amber-500 border border-amber-500/20 text-xs font-semibold mb-3">
+            <Shield className="w-3.5 h-3.5" />
+            <span>Institutional Governance</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-2">
+            Curator Role Management
+          </h1>
+          <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
+            Admin portal to grant verified credentials to Artists, Galleries, Conservators, and Certified Appraisers.
+          </p>
+        </div>
 
       {/* Admin Guard Alert */}
       {isConnected && !isDefaultAdmin && (
@@ -238,6 +256,7 @@ export default function AdminPage() {
           { label: "Role Authority", value: selectedRoleType.toUpperCase() },
         ]}
       />
-    </div>
+      </div>
+    </AuthGate>
   );
 }

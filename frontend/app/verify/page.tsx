@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, Suspense } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useReadContract } from "wagmi";
 import {
@@ -13,6 +14,7 @@ import {
   FileSearch,
   Sparkles,
   Fingerprint,
+  ArrowLeft,
 } from "lucide-react";
 import { toast } from "sonner";
 import { ARTLEDGER_ADDRESS, ARTLEDGER_ABI } from "@/lib/contract";
@@ -20,6 +22,7 @@ import { useArtwork } from "@/hooks/useArtwork";
 import { computeSHA256 } from "@/lib/hash";
 import { truncateHash } from "@/lib/formatters";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { AuthGate } from "@/components/auth/AuthGate";
 
 function VerifyContent() {
   const searchParams = useSearchParams();
@@ -80,16 +83,31 @@ function VerifyContent() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
-      {/* Header */}
-      <div className="text-center sm:text-left space-y-3">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-xs font-semibold">
-          <ShieldCheck className="w-3.5 h-3.5" />
-          <span>Zero-Trust Verification Utility</span>
+    <AuthGate
+      title="Forensic Verification Portal"
+      description="Authentication is required to run on-chain forensic hash comparisons and access institutional verification logs."
+    >
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
+        {/* Navigation Breadcrumb */}
+        <div>
+          <Link
+            href="/dashboard"
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
+          >
+            <ArrowLeft className="w-3.5 h-3.5" />
+            <span>Back to Curator Dashboard</span>
+          </Link>
         </div>
-        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
-          Verify Artwork Authenticity
-        </h1>
+
+        {/* Header */}
+        <div className="text-center sm:text-left space-y-3">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20 text-xs font-semibold">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            <span>Zero-Trust Verification Utility</span>
+          </div>
+          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight">
+            Verify Artwork Authenticity
+          </h1>
         <p className="text-sm sm:text-base text-slate-500 dark:text-slate-400 max-w-2xl leading-relaxed">
           Upload any photograph or digital file of an artwork to verify its cryptographic SHA-256 fingerprint against the registered on-chain token.
         </p>
@@ -245,7 +263,8 @@ function VerifyContent() {
           )}
         </div>
       )}
-    </div>
+      </div>
+    </AuthGate>
   );
 }
 
