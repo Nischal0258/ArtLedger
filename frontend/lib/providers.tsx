@@ -7,8 +7,9 @@ import { RainbowKitProvider, darkTheme, lightTheme } from "@rainbow-me/rainbowki
 import "@rainbow-me/rainbowkit/styles.css";
 import { wagmiConfig } from "./wagmi";
 import { Toaster } from "sonner";
+import { AuthModal } from "@/components/auth/AuthModal";
 
-// Simple Theme Context
+// Theme Context
 type Theme = "light" | "dark";
 
 interface ThemeContextType {
@@ -23,11 +24,41 @@ const ThemeContext = createContext<ThemeContextType>({
 
 export const useTheme = () => useContext(ThemeContext);
 
+// Auth Modal Context
+interface AuthModalContextType {
+  isAuthModalOpen: boolean;
+  openAuthModal: (mode?: "login" | "signup") => void;
+  closeAuthModal: () => void;
+  authModalMode: "login" | "signup";
+}
+
+const AuthModalContext = createContext<AuthModalContextType>({
+  isAuthModalOpen: false,
+  openAuthModal: () => {},
+  closeAuthModal: () => {},
+  authModalMode: "login",
+});
+
+export const useAuthModal = () => useContext(AuthModalContext);
+
 const queryClient = new QueryClient();
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>("dark");
   const [mounted, setMounted] = useState(false);
+
+  // Auth Modal State
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<"login" | "signup">("login");
+
+  const openAuthModal = (mode: "login" | "signup" = "login") => {
+    setAuthModalMode(mode);
+    setIsAuthModalOpen(true);
+  };
+
+  const closeAuthModal = () => {
+    setIsAuthModalOpen(false);
+  };
 
   useEffect(() => {
     setMounted(true);
@@ -66,13 +97,27 @@ export function Providers({ children }: { children: React.ReactNode }) {
           }
         >
           <ThemeContext.Provider value={{ theme, toggleTheme }}>
-            {children}
-            <Toaster
-              position="bottom-right"
-              theme={theme}
-              richColors
-              closeButton
-            />
+            <AuthModalContext.Provider
+              value={{
+                isAuthModalOpen,
+                openAuthModal,
+                closeAuthModal,
+                authModalMode,
+              }}
+            >
+              {children}
+              <AuthModal
+                isOpen={isAuthModalOpen}
+                onClose={closeAuthModal}
+                initialMode={authModalMode}
+              />
+              <Toaster
+                position="bottom-right"
+                theme={theme}
+                richColors
+                closeButton
+              />
+            </AuthModalContext.Provider>
           </ThemeContext.Provider>
         </RainbowKitProvider>
       </QueryClientProvider>

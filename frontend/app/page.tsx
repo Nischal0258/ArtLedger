@@ -19,8 +19,11 @@ import {
   Fingerprint,
 } from "lucide-react";
 
+import { useAuthModal } from "@/lib/providers";
+
 export default function HomePage() {
   const { isConnected } = useAccount();
+  const { openAuthModal } = useAuthModal();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -56,19 +59,15 @@ export default function HomePage() {
               <ArrowRight className="w-4 h-4" />
             </Link>
           ) : (
-            <ConnectButton.Custom>
-              {({ openConnectModal }) => (
-                <button
-                  onClick={openConnectModal}
-                  type="button"
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-all shadow-xl shadow-brand-500/25 flex items-center justify-center gap-2"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  <span>Launch App / Sign In</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              )}
-            </ConnectButton.Custom>
+            <button
+              onClick={() => openAuthModal("signup")}
+              type="button"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-all shadow-xl shadow-brand-500/25 flex items-center justify-center gap-2 group"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>Get Started</span>
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </button>
           )}
 
           <Link
@@ -171,18 +170,15 @@ export default function HomePage() {
                 <span>Enter Curator Dashboard</span>
               </Link>
             ) : (
-              <ConnectButton.Custom>
-                {({ openConnectModal }) => (
-                  <button
-                    onClick={openConnectModal}
-                    type="button"
-                    className="px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-all shadow-lg shadow-brand-500/25 flex items-center gap-2 text-sm"
-                  >
-                    <Sparkles className="w-4 h-4" />
-                    <span>Connect Wallet to Sign In</span>
-                  </button>
-                )}
-              </ConnectButton.Custom>
+              <button
+                onClick={() => openAuthModal("signup")}
+                type="button"
+                className="px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-all shadow-lg shadow-brand-500/25 flex items-center gap-2 text-sm"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Get Started</span>
+                <ArrowRight className="w-4 h-4" />
+              </button>
             )}
           </div>
         </div>

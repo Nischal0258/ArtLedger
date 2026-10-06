@@ -15,7 +15,7 @@ import {
   Shield,
   LayoutDashboard,
 } from "lucide-react";
-import { useTheme } from "@/lib/providers";
+import { useTheme, useAuthModal } from "@/lib/providers";
 import { useUserRole } from "@/hooks/useUserRole";
 import { RoleBadge } from "@/components/ui/RoleBadge";
 import { MobileDrawer } from "./MobileDrawer";
@@ -24,6 +24,7 @@ export function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
   const { theme, toggleTheme } = useTheme();
+  const { openAuthModal } = useAuthModal();
   const { isConnected, roleHash, isDefaultAdmin } = useUserRole();
   const [searchTokenId, setSearchTokenId] = useState("");
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -148,12 +149,12 @@ export function Navbar() {
                     if (!connected) {
                       return (
                         <button
-                          onClick={openConnectModal}
+                          onClick={() => openAuthModal("login")}
                           type="button"
                           className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md shadow-brand-500/20 transition-all flex items-center gap-1.5"
                         >
                           <Sparkles className="w-3.5 h-3.5" />
-                          <span>Sign In / Connect</span>
+                          <span>Sign In</span>
                         </button>
                       );
                     }

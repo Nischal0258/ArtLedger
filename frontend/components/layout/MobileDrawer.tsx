@@ -16,8 +16,7 @@ import {
   LayoutDashboard,
   Sparkles,
 } from "lucide-react";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { useTheme } from "@/lib/providers";
+import { useTheme, useAuthModal } from "@/lib/providers";
 import { useUserRole } from "@/hooks/useUserRole";
 import { RoleBadge } from "@/components/ui/RoleBadge";
 
@@ -29,6 +28,7 @@ interface MobileDrawerProps {
 export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
+  const { openAuthModal } = useAuthModal();
   const { isConnected, roleHash, isDefaultAdmin } = useUserRole();
 
   if (!isOpen) return null;
@@ -102,21 +102,17 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
 
           {!isConnected && (
             <div className="pt-2">
-              <ConnectButton.Custom>
-                {({ openConnectModal }) => (
-                  <button
-                    onClick={() => {
-                      onClose();
-                      openConnectModal();
-                    }}
-                    type="button"
-                    className="w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs shadow-md shadow-brand-500/25 flex items-center justify-center gap-2"
-                  >
-                    <Sparkles className="w-4 h-4" />
-                    <span>Sign In / Connect Wallet</span>
-                  </button>
-                )}
-              </ConnectButton.Custom>
+              <button
+                onClick={() => {
+                  onClose();
+                  openAuthModal("login");
+                }}
+                type="button"
+                className="w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs shadow-md shadow-brand-500/25 flex items-center justify-center gap-2"
+              >
+                <Sparkles className="w-4 h-4" />
+                <span>Sign In</span>
+              </button>
             </div>
           )}
         </div>

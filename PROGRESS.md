@@ -110,3 +110,21 @@ All development phases are 100% complete, deployed, tested, and actively running
   - `frontend/app/verify/page.tsx`
   - `frontend/app/admin/page.tsx`
   - `frontend/app/profile/page.tsx`
+
+### UX Polish: Branded AuthModal Popup & "Get Started" / "Sign In" CTAs
+- **Status:** COMPLETED
+- **Summary:**
+  - Built `frontend/components/auth/AuthModal.tsx` providing a branded pop-up dialog with interactive tabs for **"Sign In"** (Web3 wallet connection) and **"Create Account"** (3-step onboarding guide).
+  - Integrated `AuthModalContext` in `frontend/lib/providers.tsx` with `useAuthModal` hook for global modal control.
+  - Updated Navbar (`Navbar.tsx`): changed top header button from "Sign In / Connect" to clean **"Sign In"**, triggering the AuthModal popup.
+  - Updated Mobile Drawer (`MobileDrawer.tsx`): button updated to **"Sign In"** triggering the AuthModal popup.
+  - Updated Landing Page (`app/page.tsx`): hero and bottom CTA buttons updated to **"Get Started"**, triggering the registration modal popup.
+  - Updated `AuthGate.tsx`: authentication gate button updated to **"Sign In"** triggering the modal popup.
+  - Verified production build compiles 12 routes with 0 errors, and live daemon is active.
+- **Key Files Created/Modified:**
+  - `frontend/components/auth/AuthModal.tsx`
+  - `frontend/lib/providers.tsx`
+  - `frontend/components/layout/Navbar.tsx`
+  - `frontend/components/layout/MobileDrawer.tsx`
+  - `frontend/app/page.tsx`
+  - `frontend/components/auth/AuthGate.tsx`

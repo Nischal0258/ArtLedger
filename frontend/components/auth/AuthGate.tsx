@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useAccount } from "wagmi";
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Lock, ShieldCheck, ArrowRight, Sparkles, Compass, Shield } from "lucide-react";
+import { useAuthModal } from "@/lib/providers";
 
 interface AuthGateProps {
   children: React.ReactNode;
@@ -20,6 +21,7 @@ export function AuthGate({
   requiredRole,
 }: AuthGateProps) {
   const { isConnected } = useAccount();
+  const { openAuthModal } = useAuthModal();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -59,18 +61,14 @@ export function AuthGate({
 
           {/* Web3 Connect Action */}
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-            <ConnectButton.Custom>
-              {({ openConnectModal }) => (
-                <button
-                  onClick={openConnectModal}
-                  type="button"
-                  className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition-all shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2"
-                >
-                  <Sparkles className="w-4 h-4" />
-                  <span>Log In / Connect Wallet</span>
-                </button>
-              )}
-            </ConnectButton.Custom>
+            <button
+              onClick={() => openAuthModal("login")}
+              type="button"
+              className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-sm transition-all shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>Sign In</span>
+            </button>
 
             <Link
               href="/explore"
