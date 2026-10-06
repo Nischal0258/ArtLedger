@@ -50,17 +50,11 @@ export function Navbar() {
     }
   };
 
-  // Strictly separate public navigation from authenticated curator navigation
-  const navLinks = isConnected
-    ? [
-        { href: "/explore", label: "Explore Gallery" },
-        { href: "/dashboard", label: "Dashboard", isDashboard: true },
-        { href: "/how-it-works", label: "How It Works" },
-      ]
-    : [
-        { href: "/explore", label: "Explore Gallery" },
-        { href: "/how-it-works", label: "How It Works" },
-      ];
+  // Main public navigation links
+  const navLinks = [
+    { href: "/explore", label: "Explore Gallery" },
+    { href: "/how-it-works", label: "How It Works" },
+  ];
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200/80 dark:border-slate-800/80 bg-white/80 dark:bg-slate-950/80 backdrop-blur-md transition-colors">
@@ -85,20 +79,16 @@ export function Navbar() {
           <nav className="hidden md:flex items-center gap-1">
             {navLinks.map((item) => {
               const isActive = pathname === item.href;
-              const isDashboard = item.isDashboard;
               return (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ${
+                  className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-colors flex items-center gap-1.5 ${
                     isActive
                       ? "bg-slate-100 dark:bg-slate-800 text-brand-600 dark:text-brand-400 font-bold"
-                      : isDashboard
-                      ? "text-brand-600 dark:text-brand-400 hover:bg-brand-500/10 font-bold"
                       : "text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-50 dark:hover:bg-slate-900"
                   }`}
                 >
-                  {isDashboard && <LayoutDashboard className="w-3.5 h-3.5" />}
                   <span>{item.label}</span>
                 </Link>
               );
@@ -137,13 +127,13 @@ export function Navbar() {
           {/* Authentication & Wallet Status */}
           {isDemoMode && activePersona ? (
             <div className="flex items-center gap-2">
-              {/* Direct Dashboard button */}
+              {/* Direct Curator Dashboard button */}
               <Link
                 href="/dashboard"
-                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-500/10 hover:bg-brand-500/20 text-brand-600 dark:text-brand-400 border border-brand-500/20 text-xs font-semibold transition-colors"
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md shadow-brand-500/20 transition-all hover:scale-[1.02]"
               >
                 <LayoutDashboard className="w-3.5 h-3.5" />
-                <span>Dashboard</span>
+                <span>Curator Dashboard</span>
               </Link>
 
               {/* Persona Role Chip */}
@@ -305,13 +295,13 @@ export function Navbar() {
 
                       return (
                         <div className="flex items-center gap-2">
-                          {/* Direct Dashboard button */}
+                          {/* Direct Curator Dashboard button */}
                           <Link
                             href="/dashboard"
-                            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-500/10 hover:bg-brand-500/20 text-brand-600 dark:text-brand-400 border border-brand-500/20 text-xs font-semibold transition-colors"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs shadow-md shadow-brand-500/20 transition-all hover:scale-[1.02]"
                           >
                             <LayoutDashboard className="w-3.5 h-3.5" />
-                            <span>Dashboard</span>
+                            <span>Curator Dashboard</span>
                           </Link>
 
                           {/* Role Chip */}

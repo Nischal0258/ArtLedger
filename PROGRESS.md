@@ -192,4 +192,46 @@ All development phases are 100% complete, deployed, tested, and actively running
   - `frontend/hooks/useArtwork.ts`
   - `frontend/hooks/useProvenance.ts`
 
+### Feature: Dedicated Role-Specific Dashboards & Standalone Curator Routing
+- **Status:** COMPLETED
+- **Summary:**
+  - **5 Distinct Role-Specific Dashboard Consoles (`frontend/components/dashboard/`)**:
+    1. **`ArtistDashboardView.tsx` (Genesis Artist Studio - Aria Thorne)**:
+       - Genesis Minting Wizard link with client-side SHA-256 hashing.
+       - Built-in Pre-Mint SHA-256 Fingerprint Generator for testing client-side cryptographic hashing.
+       - Artist Portfolio showcasing original minted works.
+    2. **`GalleryDashboardView.tsx` (Cultural Institution Console - Galerie Louvre Contemporary)**:
+       - Custody management tools for legal acquisitions and secondary ownership transfers.
+       - International museum loans, exhibition curation, and secure vault storage tracking.
+       - Active museum collection catalog.
+    3. **`RestorerDashboardView.tsx` (Forensic Conservation Lab - Dr. Julian Croft)**:
+       - Scientific diagnostics and condition audit controls.
+       - Direct launcher for the Forensic SHA-256 Verifier.
+       - Chemical stabilization and multi-spectrum reflectography treatment history.
+    4. **`AppraiserDashboardView.tsx` (Valuation Authority Console - Sotheby's Heritage)**:
+       - Certified market valuations and insurance underwriting ratings.
+       - Physical authenticity inspection and condition grading.
+       - Appraised fine art portfolio.
+    5. **`AdminDashboardView.tsx` (Root Protocol Authority - Eleanor Vance)**:
+       - Institutional role assignment form for granting Artist, Gallery, Restorer, and Appraiser permissions directly on-chain.
+       - Certified Curator Directory with 1-click address autofill.
+       - Smart contract architecture and security parameters overview.
+  - **Standalone `/dashboard` Architecture (`app/dashboard/page.tsx`)**:
+    - Dynamically renders the dedicated console corresponding to the logged-in curator's role.
+    - Integrated a 1-click **Interactive Role Console Switcher** at the top of the dashboard so judges can toggle between all 5 role dashboards in real-time.
+    - Added secondary tabs for browsing the global collection and inspecting the RBAC permissions matrix.
+  - **Clean Public Navigation (`Navbar.tsx`)**:
+    - Removed `Dashboard` from the middle public links (`navLinks` remains strictly `Explore Gallery` and `How It Works`).
+    - Added a standout, dedicated `[Curator Dashboard]` primary button in the right action bar when authenticated.
+    - Immediate navigation to `/dashboard` on sign-in.
+- **Key Files Created/Modified:**
+  - `frontend/components/dashboard/ArtistDashboardView.tsx`
+  - `frontend/components/dashboard/GalleryDashboardView.tsx`
+  - `frontend/components/dashboard/RestorerDashboardView.tsx`
+  - `frontend/components/dashboard/AppraiserDashboardView.tsx`
+  - `frontend/components/dashboard/AdminDashboardView.tsx`
+  - `frontend/app/dashboard/page.tsx`
+  - `frontend/components/layout/Navbar.tsx`
+  - `PROGRESS.md`
+
 
