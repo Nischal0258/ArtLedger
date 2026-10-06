@@ -22,7 +22,7 @@ If the session disconnects or credits run out:
 
 | Phase | Description | Status | Commit Hash | Completed At |
 |:---:|---|:---:|:---:|:---:|
-| **0** | **Project Setup & Architecture Planning** | **COMPLETED** | *Pending Initial Push* | 2026-10-06 |
+| **0** | **Project Setup & Architecture Planning** | **COMPLETED** | `7327955` | 2026-10-06 |
 | **1** | **Project Scaffolding & Environment Setup** | READY TO START | - | - |
 | **2** | **Smart Contract & Test Suite (`ArtLedger.sol`)** | QUEUED | - | - |
 | **3** | **Frontend UI Foundation & Shared Kit** | QUEUED | - | - |
