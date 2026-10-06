@@ -265,8 +265,47 @@ All development phases are 100% complete, deployed, tested, and actively running
   - `frontend/components/layout/Navbar.tsx`
   - `frontend/components/layout/MobileDrawer.tsx`
   - `frontend/components/layout/Footer.tsx`
+
+### Feature: Enterprise Provenance Dashboard (SugarCRM & RON Design Inspired) + Isolated App Shell
+- **Status:** COMPLETED
+- **Summary:**
+  - **Isolated Route Chrome (`frontend/components/layout/NavigationShell.tsx` & `frontend/app/layout.tsx`)**:
+    - Created a path-aware navigation controller that detects route changes.
+    - When on `/dashboard`, the global public landing header (`Navbar`) and public marketing footer (`Footer`) are completely stripped from the DOM.
+    - Zero visual or functional overlap: the landing page cannot bleed into the dashboard, and the only exit back to the public website is the dedicated **"Sign Out"** button.
+  - **Dual-Option Authentication with 5-Role Demo Selection (`frontend/components/auth/AuthModal.tsx` & `frontend/context/AuthContext.tsx`)**:
+    - Retained clean dual-option choice: **Option A ("Connect to a Wallet")** vs **Option B ("Demo Virtual Wallet")**.
+    - Demo Wallet path features an interactive 5-role picker:
+      1. **Genesis Artist** (Aria Thorne - `0x15d3...6A65`)
+      2. **Certified Gallery** (Galerie Louvre - `0x7099...79C8`)
+      3. **Forensic Restorer** (Dr. Julian Croft - `0x3C44...93BC`)
+      4. **Fine Art Appraiser** (Sotheby's Heritage - `0x90F7...b906`)
+      5. **Protocol Admin** (Eleanor Vance - `0xf39F...2266`)
+    - Added 1-click **"Auto-fill Role Credentials"** convenience button for instantaneous testing.
+    - Added on-the-fly `switchRole(role)` functionality inside the dashboard top bar.
+  - **Inspiration-Accurate SaaS Architecture (`frontend/components/dashboard/DashboardPage.tsx`)**:
+    - **Desktop Application Shell**: Light clay/porcelain background (`#eef2f6`), crisp borders (`border-slate-200`), dark accents (`#10141a`), Mac-style window controls, environment indicators.
+    - **SugarCRM Connected Multi-Stage Journey Card**:
+      - 4-Stage visual provenance progression: *Stage 1: Intake & Minting* -> *Stage 2: Scientific Diagnostics* -> *Stage 3: Custody & Care* -> *Stage 4: Valuation & Certification*.
+      - Dynamic active-stage indicator in solid jet-black (`#10141a`) with connected progress lines and participant role avatars.
+    - **SugarCRM Analytical Widgets**:
+      - *Left*: "Ledger Provenance History & Knowledge" data table with execution status pills (`Executed`, `Active`, `Scheduled`).
+      - *Right*: "Ledger Journey Metrics" featuring dual SVG donut charts in Periwinkle Blue (`#83a2db`) and Coral Red (`#ce6969`) with metric counters.
+    - **Role Studios & Tools**:
+      - Artist Studio (Genesis Minting + Live Hash Generator)
+      - Gallery Studio (Custody Management & Exhibition Loan tracker)
+      - Restorer Studio (Forensic SHA-256 Verifier & Condition Stabilization)
+      - Appraiser Studio (Official Valuation & Grade Certifications)
+      - Admin Studio (On-Chain RBAC Permission Grants & Security Config)
+      - Full Registered Artworks Portfolio & RBAC Permission Matrix.
+- **Key Files Created/Modified:**
+  - `frontend/components/layout/NavigationShell.tsx`
   - `frontend/app/layout.tsx`
+  - `frontend/context/AuthContext.tsx`
+  - `frontend/components/auth/AuthModal.tsx`
+  - `frontend/components/dashboard/DashboardPage.tsx`
   - `PROGRESS.md`
+
 
 
 

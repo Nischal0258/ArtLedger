@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import "../styles/globals.css";
 import { Providers } from "../lib/providers";
-import { Navbar } from "@/components/layout/Navbar";
-import { Footer } from "@/components/layout/Footer";
+import { NavigationShell } from "@/components/layout/NavigationShell";
 
 export const metadata: Metadata = {
   title: "ArtLedger — Immutable On-Chain Art Provenance Tracker",
@@ -19,11 +18,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="min-h-screen bg-[#f8fafc] text-slate-900 antialiased flex flex-col">
+      <body className="min-h-screen bg-[#f8fafc] text-slate-900 antialiased flex flex-col font-sans">
         <Providers>
-          <Navbar />
-          <main className="flex-1 flex flex-col">{children}</main>
-          <Footer />
+          <NavigationShell>{children}</NavigationShell>
         </Providers>
       </body>
     </html>
