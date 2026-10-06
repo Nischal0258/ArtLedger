@@ -55,11 +55,11 @@ export function AuthModal({
   // When connection succeeds while modal is open, congratulate and close
   useEffect(() => {
     if (isRealConnected && isOpen) {
-      toast.success("Signed in successfully! Welcome to your Curator Dashboard.");
+      toast.success("Signed in successfully! Redirecting to Curator Dashboard...");
       onClose();
-      router.push("/dashboard");
+      window.location.href = "/dashboard";
     }
-  }, [isRealConnected, isOpen, onClose, router]);
+  }, [isRealConnected, isOpen, onClose]);
 
   if (!isOpen) return null;
 
@@ -74,7 +74,7 @@ export function AuthModal({
   const handleDemoSignIn = (personaId: string) => {
     connectDemoWallet(personaId);
     onClose();
-    router.push("/dashboard");
+    window.location.href = "/dashboard";
   };
 
   const selectedPersona =

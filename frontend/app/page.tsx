@@ -3,32 +3,34 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useAccount } from "wagmi";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
 import {
   ShieldCheck,
   Sparkles,
   ArrowRight,
   Layers,
   FileSearch,
-  Lock,
-  LayoutDashboard,
   Compass,
   CheckCircle2,
-  Palette,
+  Lock,
+  LayoutDashboard,
   Shield,
-  Fingerprint,
+  Palette,
 } from "lucide-react";
-
 import { useAuthModal } from "@/lib/providers";
+import { useUserRole } from "@/hooks/useUserRole";
+import { ArtworkCard } from "@/components/artwork/ArtworkCard";
 
 export default function HomePage() {
-  const { isConnected } = useAccount();
+  const { isConnected } = useUserRole();
   const { openAuthModal } = useAuthModal();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // Featured artworks for public showcase on landing page
+  const featuredTokenIds = [0, 1, 2, 4];
 
   return (
     <div className="flex-1 flex flex-col">
@@ -47,7 +49,7 @@ export default function HomePage() {
           Combat art forgery with cryptographic SHA-256 verification, ERC-721 ownership tokens, and role-gated provenance logs created exclusively by certified institutions.
         </p>
 
-        {/* Dynamic CTAs: Differentiates Guests vs Authenticated Curators */}
+        {/* Dynamic Action Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 max-w-md mx-auto mb-16">
           {mounted && isConnected ? (
             <Link
@@ -60,7 +62,7 @@ export default function HomePage() {
             </Link>
           ) : (
             <button
-              onClick={() => openAuthModal("signup")}
+              onClick={() => openAuthModal("login")}
               type="button"
               className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-all shadow-xl shadow-brand-500/25 flex items-center justify-center gap-2 group"
             >
@@ -79,7 +81,7 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {/* Live Metrics Grid */}
+        {/* Protocol Metrics Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto border border-slate-200 dark:border-slate-800 rounded-2xl p-6 bg-slate-50/50 dark:bg-slate-900/30 backdrop-blur-sm">
           <div>
             <div className="text-3xl font-bold text-brand-600 dark:text-brand-400">100%</div>
@@ -144,42 +146,81 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Curator Dashboard Call to Action Banner */}
+      {/* Featured Masterpieces Gallery Preview */}
+      <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full border-t border-slate-200 dark:border-slate-800">
+        <div className="flex flex-col md:flex-row items-start md:items-end justify-between gap-4 mb-10">
+          <div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-500/10 text-blue-500 border border-blue-500/20 text-xs font-semibold mb-2">
+              <Compass className="w-3.5 h-3.5" />
+              <span>Permanent Collection Showcase</span>
+            </div>
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              Featured Registered Masterpieces
+            </h2>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 max-w-xl">
+              Inspect verified on-chain tokens with cryptographic SHA-256 digests and multi-institutional provenance records.
+            </p>
+          </div>
+
+          <Link
+            href="/explore"
+            className="inline-flex items-center gap-2 text-xs font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 transition-colors"
+          >
+            <span>Explore All Registered Artworks</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {featuredTokenIds.map((id) => (
+            <ArtworkCard key={id} tokenId={id} />
+          ))}
+        </div>
+      </section>
+
+      {/* Public Call-To-Action Banner */}
       <section className="py-16 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto w-full">
         <div className="rounded-3xl p-8 sm:p-12 border border-slate-200 dark:border-slate-800 bg-gradient-to-tr from-slate-100 to-slate-50 dark:from-slate-900 dark:to-slate-950 flex flex-col md:flex-row items-center justify-between gap-8 shadow-sm">
           <div className="space-y-3 text-center md:text-left max-w-xl">
             <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 text-xs font-semibold">
-              <Lock className="w-3.5 h-3.5" />
-              <span>Institutional Curator Portal</span>
+              <Shield className="w-3.5 h-3.5" />
+              <span>Decentralized Cultural Heritage</span>
             </div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white">
-              Ready to Access Your Curator Tools?
+              Protect Fine Art Authenticity Forever
             </h2>
             <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">
-              Genesis artwork registration, cryptographic hash verifiers, custody logging, and administrative controls are securely housed inside the Curator Dashboard.
+              Empower artists, accredited institutions, and collectors with tamper-proof provenance on the Ethereum network.
             </p>
           </div>
 
-          <div>
+          <div className="flex flex-col sm:flex-row items-center gap-3">
             {mounted && isConnected ? (
               <Link
                 href="/dashboard"
-                className="px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-all shadow-lg shadow-brand-500/25 flex items-center gap-2 text-sm"
+                className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-all shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2 text-sm"
               >
                 <LayoutDashboard className="w-4 h-4" />
-                <span>Enter Curator Dashboard</span>
+                <span>Go to Dashboard</span>
               </Link>
             ) : (
               <button
-                onClick={() => openAuthModal("signup")}
+                onClick={() => openAuthModal("login")}
                 type="button"
-                className="px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-all shadow-lg shadow-brand-500/25 flex items-center gap-2 text-sm"
+                className="w-full sm:w-auto px-6 py-3.5 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold transition-all shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2 text-sm"
               >
                 <Sparkles className="w-4 h-4" />
                 <span>Get Started</span>
-                <ArrowRight className="w-4 h-4" />
               </button>
             )}
+
+            <Link
+              href="/explore"
+              className="w-full sm:w-auto px-5 py-3.5 rounded-xl border border-slate-300 dark:border-slate-800 hover:bg-slate-100 dark:hover:bg-slate-900 font-semibold transition-colors flex items-center justify-center gap-2 text-sm text-slate-800 dark:text-slate-200"
+            >
+              <Compass className="w-4 h-4" />
+              <span>View Gallery</span>
+            </Link>
           </div>
         </div>
       </section>

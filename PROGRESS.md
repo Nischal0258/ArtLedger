@@ -158,3 +158,38 @@ All development phases are 100% complete, deployed, tested, and actively running
   - `frontend/components/provenance/RoleActionPanel.tsx`
   - `frontend/app/admin/page.tsx`
 
+### Feature: Landing Page & Dashboard Separation + Mock Artworks Explorer
+- **Status:** COMPLETED
+- **Summary:**
+  - **Strict Landing Page / Dashboard Separation**:
+    - Completely removed any "Institutional Curator Portal" or curator tools text from `app/page.tsx`.
+    - Landing page is now 100% focused on public marketing, security pillars, protocol benefits, and a featured collection preview.
+    - Added hard redirection via `window.location.href = "/dashboard"` in `AuthModal.tsx` on sign-in, guaranteeing instant transition into the standalone `/dashboard` page.
+    - All curator workflows (Register Artwork, Verify Hash, Admin Portal, Collection Portfolio) reside exclusively on the dedicated `/dashboard` route.
+  - **Mock Artworks & Provenance Catalogue (`frontend/lib/mockArtworks.ts`)**:
+    - Created an 8-masterpiece collection of museum-grade artworks with high-resolution imagery, historical metadata, realistic SHA-256 fingerprints, and multi-event provenance timelines:
+      1. Token #0: Leonardo da Vinci — *Salvator Mundi* (1500, Oil on Walnut Panel)
+      2. Token #1: Johannes Vermeer — *Girl with a Pearl Earring* (1665, Oil on Canvas)
+      3. Token #2: Vincent van Gogh — *The Starry Night* (1889, Oil on Canvas)
+      4. Token #3: Piet Mondrian — *Composition with Red, Blue and Yellow* (1930, Oil on Canvas)
+      5. Token #4: Gustav Klimt — *The Kiss (Der Kuss)* (1908, Oil and Gold Leaf)
+      6. Token #5: Claude Monet — *Impression, Sunrise* (1872, Oil on Canvas)
+      7. Token #6: Auguste Rodin — *The Thinker (Le Penseur)* (1904, Bronze Sculpture)
+      8. Token #7: Claude Monet — *Water Lilies (Nymphéas)* (1916, Oil on Canvas)
+  - **Explorer & Hook Integration**:
+    - Updated `ExplorePage` (`app/explore/page.tsx`): Displays all registered masterworks with search by artist/title/token and filtering by medium (Oil on Canvas, Bronze Sculpture, etc.).
+    - Updated `useArtwork.ts` and `useProvenance.ts`: Fall back gracefully to mock artwork metadata and timeline events if off-chain or non-indexed.
+    - Updated `ArtworkCard.tsx` and `/artwork/[id]/page.tsx`: Load high-res images directly without external IPFS gateway timeouts.
+    - Updated `DashboardPage` (`app/dashboard/page.tsx`): Displays the full collection in the "Registered Artworks" tab.
+- **Key Files Created/Modified:**
+  - `frontend/lib/mockArtworks.ts`
+  - `frontend/app/page.tsx`
+  - `frontend/app/explore/page.tsx`
+  - `frontend/app/dashboard/page.tsx`
+  - `frontend/components/artwork/ArtworkCard.tsx`
+  - `frontend/components/auth/AuthModal.tsx`
+  - `frontend/app/artwork/[id]/page.tsx`
+  - `frontend/hooks/useArtwork.ts`
+  - `frontend/hooks/useProvenance.ts`
+
+

@@ -28,6 +28,7 @@ import { CopyButton } from "@/components/ui/CopyButton";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ArtworkCard } from "@/components/artwork/ArtworkCard";
 import { AuthGate } from "@/components/auth/AuthGate";
+import { MOCK_ARTWORKS } from "@/lib/mockArtworks";
 
 export default function DashboardPage() {
   const {
@@ -58,7 +59,16 @@ export default function DashboardPage() {
   });
 
   const totalSupply = totalSupplyData !== undefined ? Number(totalSupplyData) : 0;
-  const allIds = Array.from({ length: totalSupply }, (_, i) => i);
+
+  // Union of on-chain IDs and mock artworks
+  const displayedArtworkIds = React.useMemo(() => {
+    const ids = new Set<number>();
+    for (let i = 0; i < totalSupply; i++) {
+      ids.add(i);
+    }
+    MOCK_ARTWORKS.forEach((m) => ids.add(m.tokenId));
+    return Array.from(ids);
+  }, [totalSupply]);
 
   return (
     <AuthGate
@@ -106,7 +116,7 @@ export default function DashboardPage() {
                   Ledger Registry
                 </span>
                 <span className="text-sm font-bold text-brand-600 dark:text-brand-400">
-                  {totalSupply} Masterpieces
+                  {displayedArtworkIds.length} Masterpieces
                 </span>
               </div>
               <div>
@@ -289,7 +299,7 @@ export default function DashboardPage() {
               }`}
             >
               <Palette className="w-4 h-4" />
-              <span>Registered Artworks ({totalSupply})</span>
+              <span>Registered Artworks ({displayedArtworkIds.length})</span>
             </button>
             <button
               onClick={() => setActiveTab("tools")}
@@ -318,7 +328,7 @@ export default function DashboardPage() {
           {/* Tab 1: Artworks Grid */}
           {activeTab === "artworks" && (
             <div>
-              {totalSupply === 0 ? (
+              {displayedArtworkIds.length === 0 ? (
                 <EmptyState
                   title="No Masterpieces Registered"
                   description="Your collection does not have any minted art tokens yet. Register your first piece with client-side SHA-256 validation."
@@ -327,7 +337,7 @@ export default function DashboardPage() {
                 />
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                  {allIds.map((id) => (
+                  {displayedArtworkIds.map((id) => (
                     <ArtworkCard key={id} tokenId={id} />
                   ))}
                 </div>

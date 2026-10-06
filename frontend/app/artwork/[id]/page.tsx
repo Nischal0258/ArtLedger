@@ -23,6 +23,7 @@ import { TimelineSkeleton } from "@/components/ui/Skeleton";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { AddressPill } from "@/components/ui/AddressPill";
 import { CopyButton } from "@/components/ui/CopyButton";
+import { MOCK_ARTWORKS } from "@/lib/mockArtworks";
 
 export default function ArtworkDetailPage() {
   const params = useParams();
@@ -57,7 +58,8 @@ export default function ArtworkDetailPage() {
     );
   }
 
-  const imageUrl = resolveIPFSUrl(artwork.ipfsCID);
+  const mockArtwork = MOCK_ARTWORKS.find((m) => m.tokenId === Number(tokenId));
+  const imageUrl = mockArtwork?.imageUrl || resolveIPFSUrl(artwork.ipfsCID);
 
   return (
     <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-10">

@@ -2,6 +2,7 @@
 
 import { useReadContract } from "wagmi";
 import { ARTLEDGER_ADDRESS, ARTLEDGER_ABI } from "@/lib/contract";
+import { MOCK_ARTWORKS } from "@/lib/mockArtworks";
 
 export interface ArtworkData {
   artistName: string;
@@ -16,6 +17,7 @@ export interface ArtworkData {
 
 export function useArtwork(tokenId?: number | bigint | string) {
   const numericTokenId = tokenId !== undefined && tokenId !== "" ? BigInt(tokenId) : undefined;
+  const idNumber = numericTokenId !== undefined ? Number(numericTokenId) : undefined;
 
   const { data, isLoading, error, refetch } = useReadContract({
     address: ARTLEDGER_ADDRESS,
@@ -27,11 +29,33 @@ export function useArtwork(tokenId?: number | bigint | string) {
     },
   });
 
-  const artwork = data as ArtworkData | undefined;
+  const onChainArtwork = data as ArtworkData | undefined;
+
+  // Fallback to rich mock artwork if contract call returns undefined or errors
+  const fallbackMock =
+    idNumber !== undefined
+      ? MOCK_ARTWORKS.find((a) => a.tokenId === idNumber)
+      : undefined;
+
+  const artwork: ArtworkData | undefined =
+    onChainArtwork && onChainArtwork.title && onChainArtwork.title.trim() !== ""
+      ? onChainArtwork
+      : fallbackMock
+      ? {
+          artistName: fallbackMock.artistName,
+          title: fallbackMock.title,
+          year: fallbackMock.year,
+          medium: fallbackMock.medium,
+          imageHash: fallbackMock.imageHash,
+          ipfsCID: fallbackMock.ipfsCID,
+          mintedAt: fallbackMock.mintedAt,
+          mintedBy: fallbackMock.mintedBy,
+        }
+      : undefined;
 
   return {
     artwork,
-    isLoading,
+    isLoading: isLoading && !artwork,
     error,
     refetch,
   };

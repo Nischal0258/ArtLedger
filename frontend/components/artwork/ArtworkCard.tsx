@@ -5,6 +5,7 @@ import { resolveIPFSUrl } from "@/lib/formatters";
 import { useArtwork } from "@/hooks/useArtwork";
 import { useProvenance } from "@/hooks/useProvenance";
 import { CardSkeleton } from "@/components/ui/Skeleton";
+import { MOCK_ARTWORKS } from "@/lib/mockArtworks";
 
 interface ArtworkCardProps {
   tokenId: number | bigint;
@@ -18,7 +19,8 @@ export function ArtworkCard({ tokenId }: ArtworkCardProps) {
     return <CardSkeleton />;
   }
 
-  const imageUrl = resolveIPFSUrl(artwork.ipfsCID);
+  const mockArtwork = MOCK_ARTWORKS.find((m) => m.tokenId === Number(tokenId));
+  const imageUrl = mockArtwork?.imageUrl || resolveIPFSUrl(artwork.ipfsCID);
 
   return (
     <div className="group rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden flex flex-col transition-all hover:shadow-lg hover:border-brand-500/50">
