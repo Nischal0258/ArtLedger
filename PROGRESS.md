@@ -2,7 +2,7 @@
 
 > **Repository:** [https://github.com/Nischal0258/ArtLedger.git](https://github.com/Nischal0258/ArtLedger.git)  
 > **Master Architecture:** [ARCHITECTURE.md](file:///c:/Users/Dell/Desktop/All-Projects/ArtLedger/ARCHITECTURE.md)  
-> **Current Status:** Phase 3 COMPLETED — Ready for Phase 4  
+> **Current Status:** Phase 4 COMPLETED — Ready for Phase 5  
 
 ---
 
@@ -26,8 +26,8 @@ If the session disconnects or credits run out:
 | **1** | **Project Scaffolding & Environment Setup** | **COMPLETED** | `e9d2710` | 2026-10-06 |
 | **2** | **Smart Contract & Test Suite (`ArtLedger.sol`)** | **COMPLETED** | `e9d2710` | 2026-10-06 |
 | **3** | **Frontend UI Foundation & Shared Kit** | **COMPLETED** | `eeb16c3` | 2026-10-06 |
-| **4** | **Core Provenance Workflows (Mint, Timeline, Verify)** | READY TO START | - | - |
-| **5** | **IPFS Integration & Cryptographic Utilities** | QUEUED | - | - |
+| **4** | **Core Provenance Workflows (Mint, Timeline, Verify)** | **COMPLETED** | `a694af4` | 2026-10-06 |
+| **5** | **IPFS Integration & Cryptographic Utilities** | READY TO START | - | - |
 | **6** | **Extended Pages (Explore, Profile, Settings, Admin, How-It-Works)** | QUEUED | - | - |
 | **7** | **Integration, Local/Testnet Deployment & Demo Prep** | QUEUED | - | - |
 
@@ -49,35 +49,35 @@ If the session disconnects or credits run out:
 
 ### Phase 3: Frontend UI Foundation & Shared Kit
 - **Status:** COMPLETED (`eeb16c3`)
+- **Summary:** Reusable UI primitives (`Skeleton`, `RoleBadge`, `AddressPill`, `EmptyState`, `ConfirmModal`, `CopyButton`), layout shell (`Navbar`, `MobileDrawer`, `Footer`), Web3 custom hooks (`useUserRole`, `useArtwork`, `useProvenance`), verified clean production build.
+
+### Phase 4: Core Provenance Workflows (Mint, Timeline, Verify)
+- **Status:** COMPLETED (`a694af4`)
 - **Summary:**
-  - Developed reusable UI primitives in `frontend/components/ui/`:
-    - `Skeleton.tsx` (base skeleton, `CardSkeleton`, `TimelineSkeleton`)
-    - `RoleBadge.tsx` (institutional badges for Artist, Gallery, Restorer, Appraiser, and Admin)
-    - `AddressPill.tsx` (truncated address, identicon dot, click-to-copy, Etherscan link)
-    - `EmptyState.tsx` (icon, title, description, and action buttons)
-    - `ConfirmModal.tsx` (transaction verification dialog with summary details & gas warning)
-    - `CopyButton.tsx` (click-to-copy with checkmark feedback & Sonner toast notification)
-  - Developed layout shell in `frontend/components/layout/`:
-    - `Navbar.tsx` (brand logo, Token ID search bar, theme toggle, custom RainbowKit wallet connect button displaying address & active role badge, mobile hamburger)
-    - `MobileDrawer.tsx` (flyout menu for mobile viewports)
-    - `Footer.tsx` (contract address link, Sepolia network badge, GitHub repository link, copyright)
-  - Developed Web3 custom hooks in `frontend/hooks/`:
-    - `useUserRole.ts` (queries `resolveCallerRole` on ArtLedger contract for connected wallet)
-    - `useArtwork.ts` (reads `getArtwork(tokenId)`)
-    - `useProvenance.ts` (reads `getProvenance(tokenId)`)
-  - Integrated `Navbar` and `Footer` in `frontend/app/layout.tsx`.
-  - Verified `npm run build` generates clean production bundle with 0 errors.
+  - Implemented `frontend/lib/hash.ts` with browser-native Web Crypto SHA-256 digest computation returning Ethereum `bytes32`.
+  - Built `/mint` page (`frontend/app/mint/page.tsx`):
+    - Image dropzone with live preview and instant client-side SHA-256 fingerprint generation.
+    - Role pre-check banner warning non-artists of RBAC restrictions.
+    - Provenance metadata inputs (Title, Artist Name, Year, Medium, IPFS CID).
+    - `ConfirmModal` integration with permanent record advisory.
+    - Direct wagmi `mintArtwork` transaction call with confetti celebration upon success.
+  - Built `/artwork/[id]` page (`frontend/app/artwork/[id]/page.tsx`):
+    - Artwork showcase with IPFS image, metadata specs, and click-to-copy SHA-256 fingerprint.
+    - Vertical chronological `ProvenanceTimeline` using `TimelineEvent.tsx` with role badges, timestamps, descriptions, and locations.
+    - Role-gated `RoleActionPanel.tsx` enabling Galleries, Restorers, and Appraisers to log authenticated lifecycle events with unauthorized warning alerts.
+    - Downloadable physical label `QRCodeCard.tsx` generating scannable frame tags pointing to the artwork's digital ledger entry.
+  - Built `/verify` page (`frontend/app/verify/page.tsx`):
+    - Forensic verification utility with token lookup and image file dropzone.
+    - Real-time client-side SHA-256 hashing.
+    - On-chain comparison querying `verifyImageHash`.
+    - Prominent status banners for **Authentic Original** vs **Counterfeit / Forgery Detected**.
+  - Verified `next build` generates 6 static and dynamic routes with zero compilation errors.
 - **Key Files Created:**
-  - `frontend/components/ui/Skeleton.tsx`
-  - `frontend/components/ui/RoleBadge.tsx`
-  - `frontend/components/ui/AddressPill.tsx`
-  - `frontend/components/ui/EmptyState.tsx`
-  - `frontend/components/ui/ConfirmModal.tsx`
-  - `frontend/components/ui/CopyButton.tsx`
-  - `frontend/components/layout/Navbar.tsx`
-  - `frontend/components/layout/MobileDrawer.tsx`
-  - `frontend/components/layout/Footer.tsx`
-  - `frontend/hooks/useUserRole.ts`
-  - `frontend/hooks/useArtwork.ts`
-  - `frontend/hooks/useProvenance.ts`
-- **Next Step:** Await user confirmation to proceed to **Phase 4: Core Provenance Workflows (Mint, Timeline, Verify)**.
+  - `frontend/lib/hash.ts`
+  - `frontend/app/mint/page.tsx`
+  - `frontend/app/artwork/[id]/page.tsx`
+  - `frontend/app/verify/page.tsx`
+  - `frontend/components/provenance/TimelineEvent.tsx`
+  - `frontend/components/provenance/RoleActionPanel.tsx`
+  - `frontend/components/provenance/QRCodeCard.tsx`
+- **Next Step:** Await user confirmation to proceed to **Phase 5: IPFS Integration & Cryptographic Utilities**.
