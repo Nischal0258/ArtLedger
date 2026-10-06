@@ -2,7 +2,7 @@
 
 > **Repository:** [https://github.com/Nischal0258/ArtLedger.git](https://github.com/Nischal0258/ArtLedger.git)  
 > **Master Architecture:** [ARCHITECTURE.md](file:///c:/Users/Dell/Desktop/All-Projects/ArtLedger/ARCHITECTURE.md)  
-> **Current Status:** Phase 4 COMPLETED — Ready for Phase 5  
+> **Current Status:** Phase 5 COMPLETED — Ready for Phase 6  
 
 ---
 
@@ -27,8 +27,8 @@ If the session disconnects or credits run out:
 | **2** | **Smart Contract & Test Suite (`ArtLedger.sol`)** | **COMPLETED** | `e9d2710` | 2026-10-06 |
 | **3** | **Frontend UI Foundation & Shared Kit** | **COMPLETED** | `eeb16c3` | 2026-10-06 |
 | **4** | **Core Provenance Workflows (Mint, Timeline, Verify)** | **COMPLETED** | `a694af4` | 2026-10-06 |
-| **5** | **IPFS Integration & Cryptographic Utilities** | READY TO START | - | - |
-| **6** | **Extended Pages (Explore, Profile, Settings, Admin, How-It-Works)** | QUEUED | - | - |
+| **5** | **IPFS Integration & Cryptographic Utilities** | **COMPLETED** | `39f644f` | 2026-10-06 |
+| **6** | **Extended Pages (Explore, Profile, Settings, Admin, How-It-Works)** | READY TO START | - | - |
 | **7** | **Integration, Local/Testnet Deployment & Demo Prep** | QUEUED | - | - |
 
 ---
@@ -53,31 +53,21 @@ If the session disconnects or credits run out:
 
 ### Phase 4: Core Provenance Workflows (Mint, Timeline, Verify)
 - **Status:** COMPLETED (`a694af4`)
+- **Summary:** Developed Web Crypto SHA-256 utility in `lib/hash.ts`, built `/mint` registration wizard, `/artwork/[id]` public timeline with `QRCodeCard` and `RoleActionPanel`, built `/verify` forensic comparator with match/mismatch status banners.
+
+### Phase 5: IPFS Integration & Cryptographic Utilities
+- **Status:** COMPLETED (`39f644f`)
 - **Summary:**
-  - Implemented `frontend/lib/hash.ts` with browser-native Web Crypto SHA-256 digest computation returning Ethereum `bytes32`.
-  - Built `/mint` page (`frontend/app/mint/page.tsx`):
-    - Image dropzone with live preview and instant client-side SHA-256 fingerprint generation.
-    - Role pre-check banner warning non-artists of RBAC restrictions.
-    - Provenance metadata inputs (Title, Artist Name, Year, Medium, IPFS CID).
-    - `ConfirmModal` integration with permanent record advisory.
-    - Direct wagmi `mintArtwork` transaction call with confetti celebration upon success.
-  - Built `/artwork/[id]` page (`frontend/app/artwork/[id]/page.tsx`):
-    - Artwork showcase with IPFS image, metadata specs, and click-to-copy SHA-256 fingerprint.
-    - Vertical chronological `ProvenanceTimeline` using `TimelineEvent.tsx` with role badges, timestamps, descriptions, and locations.
-    - Role-gated `RoleActionPanel.tsx` enabling Galleries, Restorers, and Appraisers to log authenticated lifecycle events with unauthorized warning alerts.
-    - Downloadable physical label `QRCodeCard.tsx` generating scannable frame tags pointing to the artwork's digital ledger entry.
-  - Built `/verify` page (`frontend/app/verify/page.tsx`):
-    - Forensic verification utility with token lookup and image file dropzone.
-    - Real-time client-side SHA-256 hashing.
-    - On-chain comparison querying `verifyImageHash`.
-    - Prominent status banners for **Authentic Original** vs **Counterfeit / Forgery Detected**.
-  - Verified `next build` generates 6 static and dynamic routes with zero compilation errors.
-- **Key Files Created:**
-  - `frontend/lib/hash.ts`
+  - Implemented `frontend/lib/ipfs.ts`:
+    - Full Pinata Cloud API pinning integration (`uploadImageToIPFS`, `uploadMetadataToIPFS`).
+    - Robust deterministic offline/local fallback generating valid `Qm...` IPFS CIDs for test resilience.
+  - Wired automated pinning directly into the `/mint` workflow:
+    - Drag-and-drop triggers concurrent SHA-256 fingerprinting and IPFS pinning.
+    - Live upload status progress bar ("Uploading asset to Pinata gateway...").
+    - Auto-populates and locks the generated IPFS CID.
+    - Added IPFS CID display card with click-to-copy utility.
+  - Verified `next build` passes with zero errors.
+- **Key Files Created/Modified:**
+  - `frontend/lib/ipfs.ts`
   - `frontend/app/mint/page.tsx`
-  - `frontend/app/artwork/[id]/page.tsx`
-  - `frontend/app/verify/page.tsx`
-  - `frontend/components/provenance/TimelineEvent.tsx`
-  - `frontend/components/provenance/RoleActionPanel.tsx`
-  - `frontend/components/provenance/QRCodeCard.tsx`
-- **Next Step:** Await user confirmation to proceed to **Phase 5: IPFS Integration & Cryptographic Utilities**.
+- **Next Step:** Await user confirmation to proceed to **Phase 6: Extended Pages (Explore, Profile, Settings, Admin, How-It-Works)**.
