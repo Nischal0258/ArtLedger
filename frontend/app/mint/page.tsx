@@ -19,6 +19,7 @@ import {
 import { ARTLEDGER_ADDRESS, ARTLEDGER_ABI } from "@/lib/contract";
 import { useUserRole } from "@/hooks/useUserRole";
 import { computeSHA256 } from "@/lib/hash";
+import { uploadImageToIPFS } from "@/lib/ipfs";
 import { truncateHash } from "@/lib/formatters";
 import { CopyButton } from "@/components/ui/CopyButton";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
@@ -38,7 +39,9 @@ export default function MintPage() {
   const [title, setTitle] = useState("");
   const [year, setYear] = useState(new Date().getFullYear());
   const [medium, setMedium] = useState("Oil on Canvas");
-  const [ipfsCID, setIpfsCID] = useState("QmArtLedgerDefaultCID00000000000000000000000000");
+  const [ipfsCID, setIpfsCID] = useState("");
+  const [isUploadingIPFS, setIsUploadingIPFS] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState("");
 
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [mintedTokenId, setMintedTokenId] = useState<number | null>(null);
@@ -50,22 +53,30 @@ export default function MintPage() {
     hash,
   });
 
-  // Handle Image Selection & SHA-256 Hashing
+  // Handle Image Selection, SHA-256 Hashing & IPFS Pinning
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       const selected = e.target.files[0];
       setFile(selected);
       setFilePreview(URL.createObjectURL(selected));
       setIsHashing(true);
+      setIsUploadingIPFS(true);
 
       try {
+        // 1. Compute Cryptographic SHA-256 Digest
         const computed = await computeSHA256(selected);
         setImageHash(computed);
-        toast.success("SHA-256 fingerprint generated!");
+
+        // 2. Upload and Pin to IPFS
+        const cid = await uploadImageToIPFS(selected, (status) => setUploadStatus(status));
+        setIpfsCID(cid);
+
+        toast.success("Image hashed & pinned to IPFS!");
       } catch (err) {
-        toast.error("Failed to compute image hash");
+        toast.error("Failed to process image file");
       } finally {
         setIsHashing(false);
+        setIsUploadingIPFS(false);
       }
     }
   };
@@ -207,6 +218,28 @@ export default function MintPage() {
                   : imageHash
                   ? imageHash
                   : "Upload an image above to generate hash"}
+              </div>
+            </div>
+
+            {/* IPFS CID Status */}
+            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-800 space-y-1.5">
+              <div className="flex items-center justify-between text-xs text-slate-500">
+                <span className="font-semibold uppercase tracking-wider text-[10px]">
+                  Decentralized IPFS CID
+                </span>
+                {ipfsCID && <CopyButton textToCopy={ipfsCID} label="Copy CID" />}
+              </div>
+              <div className="font-mono text-xs text-slate-800 dark:text-slate-200 break-all select-all flex items-center gap-1.5">
+                {isUploadingIPFS ? (
+                  <span className="text-brand-500 animate-pulse flex items-center gap-1.5">
+                    <span className="w-2 h-2 rounded-full bg-brand-500 animate-ping" />
+                    {uploadStatus || "Pinning asset to IPFS gateway..."}
+                  </span>
+                ) : ipfsCID ? (
+                  <span>{ipfsCID}</span>
+                ) : (
+                  <span className="text-slate-400">Auto-generated upon image upload</span>
+                )}
               </div>
             </div>
           </div>
