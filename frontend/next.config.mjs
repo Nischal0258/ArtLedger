@@ -3,13 +3,9 @@ const nextConfig = {
   reactStrictMode: true,
   webpack: (config, { webpack }) => {
     config.externals.push("pino-pretty", "lokijs", "encoding");
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      "@react-native-async-storage/async-storage": false,
-    };
     config.plugins.push(
       new webpack.IgnorePlugin({
-        resourceRegExp: /^(@x402|@react-native-async-storage\/async-storage)/,
+        resourceRegExp: /^@x402/,
       })
     );
     return config;
