@@ -14,9 +14,13 @@ import {
   ChevronRight,
   Shield,
   LayoutDashboard,
+  ChevronDown,
+  LogOut,
+  RefreshCw,
 } from "lucide-react";
 import { useTheme, useAuthModal } from "@/lib/providers";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useDemoWallet } from "@/lib/demoWallet";
 import { RoleBadge } from "@/components/ui/RoleBadge";
 import { MobileDrawer } from "./MobileDrawer";
 
@@ -26,8 +30,17 @@ export function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const { openAuthModal } = useAuthModal();
   const { isConnected, roleHash, isDefaultAdmin } = useUserRole();
+  const {
+    isDemoMode,
+    activePersona,
+    allPersonas,
+    switchDemoPersona,
+    disconnectDemoWallet,
+  } = useDemoWallet();
+
   const [searchTokenId, setSearchTokenId] = useState("");
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [isDemoMenuOpen, setIsDemoMenuOpen] = useState(false);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -121,88 +134,208 @@ export function Navbar() {
             )}
           </button>
 
-          {/* Custom Web3 Connect Button */}
-          <ConnectButton.Custom>
-            {({
-              account,
-              chain,
-              openAccountModal,
-              openChainModal,
-              openConnectModal,
-              mounted,
-            }) => {
-              const ready = mounted;
-              const connected = ready && account && chain;
+          {/* Authentication & Wallet Status */}
+          {isDemoMode && activePersona ? (
+            <div className="flex items-center gap-2">
+              {/* Direct Dashboard button */}
+              <Link
+                href="/dashboard"
+                className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-500/10 hover:bg-brand-500/20 text-brand-600 dark:text-brand-400 border border-brand-500/20 text-xs font-semibold transition-colors"
+              >
+                <LayoutDashboard className="w-3.5 h-3.5" />
+                <span>Dashboard</span>
+              </Link>
 
-              return (
-                <div
-                  {...(!ready && {
-                    "aria-hidden": true,
-                    style: {
-                      opacity: 0,
-                      pointerEvents: "none",
-                      userSelect: "none",
-                    },
-                  })}
+              {/* Persona Role Chip */}
+              <div className="hidden lg:block">
+                <RoleBadge roleHash={roleHash} />
+              </div>
+
+              {/* Demo Account Dropdown Pill */}
+              <div className="relative">
+                <button
+                  onClick={() => setIsDemoMenuOpen(!isDemoMenuOpen)}
+                  type="button"
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-brand-500/30 bg-brand-500/10 hover:bg-brand-500/20 text-xs font-semibold text-brand-600 dark:text-brand-400 transition-all shadow-sm"
                 >
-                  {(() => {
-                    if (!connected) {
-                      return (
-                        <button
-                          onClick={() => openAuthModal("login")}
-                          type="button"
-                          className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md shadow-brand-500/20 transition-all flex items-center gap-1.5"
-                        >
-                          <Sparkles className="w-3.5 h-3.5" />
-                          <span>Sign In</span>
-                        </button>
-                      );
-                    }
+                  <span className="text-sm">🎭</span>
+                  <span className="font-bold">
+                    {activePersona.name.split(" ")[0]} ({activePersona.roleName})
+                  </span>
+                  <ChevronDown className="w-3.5 h-3.5 opacity-70" />
+                </button>
 
-                    if (chain.unsupported) {
-                      return (
-                        <button
-                          onClick={openChainModal}
-                          type="button"
-                          className="px-3 py-1.5 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 text-xs font-semibold transition-colors flex items-center gap-1.5"
-                        >
-                          Wrong Network
-                        </button>
-                      );
-                    }
+                {isDemoMenuOpen && (
+                  <>
+                    <div
+                      className="fixed inset-0 z-40"
+                      onClick={() => setIsDemoMenuOpen(false)}
+                    />
+                    <div className="absolute right-0 mt-2 w-72 rounded-2xl bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xl p-3.5 space-y-3 z-50 animate-fade-in">
+                      {/* Persona Header */}
+                      <div className="pb-2.5 border-b border-slate-100 dark:border-slate-800 space-y-1">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[10px] text-brand-600 dark:text-brand-400 font-bold uppercase tracking-wider">
+                            Virtual Demo Wallet
+                          </span>
+                          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                        </div>
+                        <div className="font-extrabold text-sm text-slate-900 dark:text-white truncate">
+                          {activePersona.name}
+                        </div>
+                        <div className="text-[11px] text-slate-500 font-medium">
+                          {activePersona.roleTitle}
+                        </div>
+                        <div className="text-[10px] font-mono text-slate-400 truncate">
+                          {activePersona.address}
+                        </div>
+                        <div className="pt-1 text-xs font-bold text-emerald-600 dark:text-emerald-400">
+                          Balance: 10,000.00 ETH (Virtual)
+                        </div>
+                      </div>
 
-                    return (
-                      <div className="flex items-center gap-2">
-                        {/* Direct Dashboard button */}
+                      {/* Switch Persona Options */}
+                      <div className="space-y-1">
+                        <div className="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-1">
+                          Switch Curator Persona
+                        </div>
+                        {allPersonas.map((persona) => {
+                          const isActive = activePersona.id === persona.id;
+                          return (
+                            <button
+                              key={persona.id}
+                              onClick={() => {
+                                switchDemoPersona(persona.id);
+                                setIsDemoMenuOpen(false);
+                              }}
+                              className={`w-full text-left px-2.5 py-1.5 rounded-lg text-xs font-medium flex items-center justify-between transition-colors ${
+                                isActive
+                                  ? "bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold"
+                                  : "text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800"
+                              }`}
+                            >
+                              <span className="truncate">{persona.name}</span>
+                              <span className="text-[10px] font-mono text-slate-400 shrink-0 ml-2">
+                                {persona.roleName}
+                              </span>
+                            </button>
+                          );
+                        })}
+                      </div>
+
+                      {/* Go to Dashboard Link */}
+                      <div className="pt-1">
                         <Link
                           href="/dashboard"
-                          className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-500/10 hover:bg-brand-500/20 text-brand-600 dark:text-brand-400 border border-brand-500/20 text-xs font-semibold transition-colors"
+                          onClick={() => setIsDemoMenuOpen(false)}
+                          className="w-full py-2 px-3 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs flex items-center justify-center gap-1.5 shadow-md shadow-brand-500/20"
                         >
                           <LayoutDashboard className="w-3.5 h-3.5" />
-                          <span>Dashboard</span>
+                          <span>Curator Command Center</span>
                         </Link>
+                      </div>
 
-                        {/* Role Chip */}
-                        <div className="hidden lg:block">
-                          <RoleBadge roleHash={roleHash} />
-                        </div>
-
-                        {/* Account Pill */}
+                      {/* Disconnect Option */}
+                      <div className="pt-2 border-t border-slate-100 dark:border-slate-800">
                         <button
-                          onClick={openAccountModal}
-                          type="button"
-                          className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-mono font-medium transition-colors"
+                          onClick={() => {
+                            disconnectDemoWallet();
+                            setIsDemoMenuOpen(false);
+                          }}
+                          className="w-full py-1.5 px-3 rounded-lg bg-rose-500/10 hover:bg-rose-500/20 text-rose-500 text-xs font-semibold transition-colors flex items-center justify-center gap-1.5"
                         >
-                          <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                          <span>{account.displayName}</span>
+                          <LogOut className="w-3.5 h-3.5" />
+                          <span>Disconnect Demo Wallet</span>
                         </button>
                       </div>
-                    );
-                  })()}
-                </div>
-              );
-            }}
-          </ConnectButton.Custom>
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          ) : (
+            <ConnectButton.Custom>
+              {({
+                account,
+                chain,
+                openAccountModal,
+                openChainModal,
+                openConnectModal,
+                mounted,
+              }) => {
+                const ready = mounted;
+                const connected = ready && account && chain;
+
+                return (
+                  <div
+                    {...(!ready && {
+                      "aria-hidden": true,
+                      style: {
+                        opacity: 0,
+                        pointerEvents: "none",
+                        userSelect: "none",
+                      },
+                    })}
+                  >
+                    {(() => {
+                      if (!connected) {
+                        return (
+                          <button
+                            onClick={() => openAuthModal("login")}
+                            type="button"
+                            className="px-4 py-2 rounded-xl bg-brand-600 hover:bg-brand-700 text-white text-xs font-semibold shadow-md shadow-brand-500/20 transition-all flex items-center gap-1.5"
+                          >
+                            <Sparkles className="w-3.5 h-3.5" />
+                            <span>Sign In</span>
+                          </button>
+                        );
+                      }
+
+                      if (chain.unsupported) {
+                        return (
+                          <button
+                            onClick={openChainModal}
+                            type="button"
+                            className="px-3 py-1.5 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 text-xs font-semibold transition-colors flex items-center gap-1.5"
+                          >
+                            Wrong Network
+                          </button>
+                        );
+                      }
+
+                      return (
+                        <div className="flex items-center gap-2">
+                          {/* Direct Dashboard button */}
+                          <Link
+                            href="/dashboard"
+                            className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-brand-500/10 hover:bg-brand-500/20 text-brand-600 dark:text-brand-400 border border-brand-500/20 text-xs font-semibold transition-colors"
+                          >
+                            <LayoutDashboard className="w-3.5 h-3.5" />
+                            <span>Dashboard</span>
+                          </Link>
+
+                          {/* Role Chip */}
+                          <div className="hidden lg:block">
+                            <RoleBadge roleHash={roleHash} />
+                          </div>
+
+                          {/* Account Pill */}
+                          <button
+                            onClick={openAccountModal}
+                            type="button"
+                            className="flex items-center gap-2 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 hover:bg-slate-100 dark:hover:bg-slate-800 text-xs font-mono font-medium transition-colors"
+                          >
+                            <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+                            <span>{account.displayName}</span>
+                          </button>
+                        </div>
+                      );
+                    })()}
+                  </div>
+                );
+              }}
+            </ConnectButton.Custom>
+          )}
 
           {/* Mobile Menu Hamburger */}
           <button

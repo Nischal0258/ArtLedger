@@ -30,8 +30,11 @@ import { ArtworkCard } from "@/components/artwork/ArtworkCard";
 import { AuthGate } from "@/components/auth/AuthGate";
 
 export default function DashboardPage() {
-  const { address } = useAccount();
   const {
+    address,
+    isDemoMode,
+    activePersona,
+    switchDemoPersona,
     roleHash,
     isArtist,
     isGallery,
@@ -39,7 +42,9 @@ export default function DashboardPage() {
     isAppraiser,
     isDefaultAdmin,
   } = useUserRole();
-  const { data: balanceData } = useBalance({ address });
+  const { data: balanceData } = useBalance({
+    address: address as `0x${string}` | undefined,
+  });
 
   const [activeTab, setActiveTab] = useState<"artworks" | "tools" | "permissions">(
     "artworks"
@@ -89,7 +94,9 @@ export default function DashboardPage() {
                   Connected Balance
                 </span>
                 <span className="text-sm font-bold text-slate-900 dark:text-white">
-                  {balanceData
+                  {isDemoMode
+                    ? "10,000.00 ETH (Virtual)"
+                    : balanceData
                     ? `${Number(balanceData.formatted).toFixed(4)} ${balanceData.symbol}`
                     : "0.00 ETH"}
                 </span>
@@ -108,11 +115,34 @@ export default function DashboardPage() {
                 </span>
                 <span className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-500">
                   <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                  Sepolia / Local Node
+                  {isDemoMode ? "Virtual Local Node" : "Sepolia / Local Node"}
                 </span>
               </div>
             </div>
           </div>
+
+          {/* Virtual Demo Wallet Persona Banner */}
+          {isDemoMode && activePersona && (
+            <div className="pt-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 bg-brand-500/5 -mx-6 -mb-6 p-4 sm:px-6 rounded-b-3xl">
+              <div className="flex items-center gap-3">
+                <span className="text-2xl">🎭</span>
+                <div>
+                  <div className="text-xs font-bold text-slate-900 dark:text-white flex items-center gap-2">
+                    <span>Virtual Demo Wallet Active: {activePersona.name}</span>
+                    <span className="px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 text-[10px] font-semibold border border-brand-500/20">
+                      {activePersona.roleTitle}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-slate-500">
+                    {activePersona.description}
+                  </p>
+                </div>
+              </div>
+              <div className="text-[11px] font-semibold text-brand-600 dark:text-brand-400 shrink-0">
+                Switch persona anytime via top-right menu ↗
+              </div>
+            </div>
+          )}
 
           {/* Active Roles & Capability Strip */}
           <div className="pt-4 border-t border-slate-100 dark:border-slate-800/80 flex flex-wrap items-center gap-2">

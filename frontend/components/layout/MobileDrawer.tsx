@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -15,9 +15,12 @@ import {
   Moon,
   LayoutDashboard,
   Sparkles,
+  LogOut,
+  RefreshCw,
 } from "lucide-react";
 import { useTheme, useAuthModal } from "@/lib/providers";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useDemoWallet } from "@/lib/demoWallet";
 import { RoleBadge } from "@/components/ui/RoleBadge";
 
 interface MobileDrawerProps {
@@ -30,6 +33,15 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
   const { theme, toggleTheme } = useTheme();
   const { openAuthModal } = useAuthModal();
   const { isConnected, roleHash, isDefaultAdmin } = useUserRole();
+  const {
+    isDemoMode,
+    activePersona,
+    allPersonas,
+    switchDemoPersona,
+    disconnectDemoWallet,
+  } = useDemoWallet();
+
+  const [showPersonaList, setShowPersonaList] = useState(false);
 
   if (!isOpen) return null;
 
@@ -57,7 +69,7 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
       />
 
       {/* Drawer Content */}
-      <div className="relative ml-auto w-4/5 max-w-sm h-full bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-2xl animate-fade-in">
+      <div className="relative ml-auto w-4/5 max-w-sm h-full bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 p-6 flex flex-col justify-between shadow-2xl animate-fade-in overflow-y-auto">
         <div className="space-y-6">
           <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
             <span className="font-extrabold text-lg text-slate-900 dark:text-white">
@@ -71,10 +83,82 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
             </button>
           </div>
 
+          {/* Connected / Demo Status */}
           {isConnected && (
-            <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60">
-              <div className="text-xs text-slate-400 mb-1 font-medium">Active Curator Role</div>
-              <RoleBadge roleHash={roleHash} />
+            <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700/60 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wider">
+                  {isDemoMode ? "🎭 Virtual Demo Wallet" : "Active Curator"}
+                </span>
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+              </div>
+
+              {isDemoMode && activePersona && (
+                <div className="space-y-1">
+                  <div className="font-bold text-xs text-slate-900 dark:text-white truncate">
+                    {activePersona.name}
+                  </div>
+                  <div className="text-[10px] font-mono text-slate-400 truncate">
+                    {activePersona.address}
+                  </div>
+                  <div className="text-[11px] font-semibold text-emerald-500">
+                    10,000 ETH (Virtual)
+                  </div>
+                </div>
+              )}
+
+              <div className="pt-1">
+                <RoleBadge roleHash={roleHash} />
+              </div>
+
+              {isDemoMode && (
+                <div className="pt-2 border-t border-slate-200/60 dark:border-slate-700/60 space-y-2">
+                  <button
+                    onClick={() => setShowPersonaList(!showPersonaList)}
+                    type="button"
+                    className="w-full text-left text-[11px] font-bold text-brand-600 dark:text-brand-400 flex items-center justify-between"
+                  >
+                    <span>Switch Demo Persona</span>
+                    <RefreshCw className="w-3 h-3" />
+                  </button>
+
+                  {showPersonaList && (
+                    <div className="space-y-1 pt-1">
+                      {allPersonas.map((p) => (
+                        <button
+                          key={p.id}
+                          onClick={() => {
+                            switchDemoPersona(p.id);
+                            setShowPersonaList(false);
+                          }}
+                          className={`w-full text-left px-2 py-1 rounded text-xs flex items-center justify-between ${
+                            activePersona?.id === p.id
+                              ? "bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold"
+                              : "text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-700"
+                          }`}
+                        >
+                          <span className="truncate">{p.name}</span>
+                          <span className="text-[10px] font-mono text-slate-400 ml-1">
+                            {p.roleName}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => {
+                      disconnectDemoWallet();
+                      onClose();
+                    }}
+                    type="button"
+                    className="w-full py-1 px-2 rounded-lg bg-rose-500/10 text-rose-500 text-xs font-semibold flex items-center justify-center gap-1.5"
+                  >
+                    <LogOut className="w-3 h-3" />
+                    <span>Disconnect Demo</span>
+                  </button>
+                </div>
+              )}
             </div>
           )}
 
@@ -111,7 +195,7 @@ export function MobileDrawer({ isOpen, onClose }: MobileDrawerProps) {
                 className="w-full py-3 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs shadow-md shadow-brand-500/25 flex items-center justify-center gap-2"
               >
                 <Sparkles className="w-4 h-4" />
-                <span>Sign In</span>
+                <span>Sign In / Demo Wallet</span>
               </button>
             </div>
           )}

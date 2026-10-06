@@ -14,6 +14,7 @@ import {
 import { ARTLEDGER_ADDRESS, ARTLEDGER_ABI } from "@/lib/contract";
 import { EventType, EVENT_METADATA } from "@/lib/constants";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useDemoWallet } from "@/lib/demoWallet";
 import { RoleBadge } from "@/components/ui/RoleBadge";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
 
@@ -23,8 +24,8 @@ interface RoleActionPanelProps {
 }
 
 export function RoleActionPanel({ tokenId, onEventLogged }: RoleActionPanelProps) {
-  const { isConnected } = useAccount();
-  const { roleHash, hasAnyRole } = useUserRole();
+  const { isConnected, roleHash, hasAnyRole, isDemoMode } = useUserRole();
+  const { executeDemoTransaction } = useDemoWallet();
 
   const [eventType, setEventType] = useState<EventType>(EventType.CustodyTransfer);
   const [description, setDescription] = useState("");
@@ -56,6 +57,26 @@ export function RoleActionPanel({ tokenId, onEventLogged }: RoleActionPanelProps
 
   const executeEventLog = async () => {
     try {
+      if (isDemoMode) {
+        toast.info("Broadcasting custody event via Virtual Demo Wallet...");
+        await executeDemoTransaction({
+          functionName: "logCustodyEvent",
+          args: [
+            BigInt(tokenId),
+            Number(eventType),
+            description.trim(),
+            location.trim() || "Not Disclosed",
+          ],
+        });
+
+        setIsConfirmOpen(false);
+        setDescription("");
+        setLocation("");
+        toast.success("Custody event broadcasted to ArtLedger!");
+        if (onEventLogged) onEventLogged();
+        return;
+      }
+
       await writeContractAsync({
         address: ARTLEDGER_ADDRESS,
         abi: ARTLEDGER_ABI,

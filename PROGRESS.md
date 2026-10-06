@@ -128,3 +128,33 @@ All development phases are 100% complete, deployed, tested, and actively running
   - `frontend/components/layout/MobileDrawer.tsx`
   - `frontend/app/page.tsx`
   - `frontend/components/auth/AuthGate.tsx`
+
+### Feature: Virtual Demo Wallet (No MetaMask Required) & Persona Switching
+- **Status:** COMPLETED
+- **Summary:**
+  - Implemented `frontend/lib/demoWallet.tsx` providing a global Virtual Demo Wallet system with 5 pre-configured personas representing distinct fine art roles:
+    1. **Master Curator & Admin** (`0xf39F...2266`): Root administrator with role granting & minting privileges.
+    2. **Certified Fine Art Gallery** (`0x7099...79C8`): Institutional gallery for transfers & exhibitions.
+    3. **Senior Conservator & Restorer** (`0x3C44...93BC`): Scientific conservator for condition & restoration reports.
+    4. **Master Appraiser** (`0x90F7...b906`): Accredited valuer for insurance & authenticity certifications.
+    5. **Genesis Fine Artist** (`0x15d3...6A65`): Verified creator for original artwork minting & SHA-256 anchoring.
+  - Features:
+    - **One-Click Instant Connect**: Evaluators and judges without MetaMask or browser extensions can sign in with 1 click directly to `/dashboard`.
+    - **Interactive Persona Switcher**: Instant switching between Admin, Gallery, Restorer, Appraiser, and Artist right from the top navigation dropdown menu or mobile drawer without logging out.
+    - **Live Hardhat Node Transaction Broadcasting**: Directly sends calldata to local Hardhat node (`http://127.0.0.1:8545`) via JSON-RPC using unlocked accounts, with seamless fallback simulation if offline.
+    - **Write Operation Support**: Minting (`/mint`), Custody Event Logging (`RoleActionPanel`), and Admin Role Assignment (`/admin`) all work 100% interactively in Virtual Demo Wallet mode.
+    - **Persistent Session**: Active persona is preserved across page refreshes via `localStorage`.
+    - **AuthGate Compatibility**: Automatically unlocks all protected curator areas when in demo mode.
+- **Key Files Created/Modified:**
+  - `frontend/lib/demoWallet.tsx`
+  - `frontend/lib/providers.tsx`
+  - `frontend/hooks/useUserRole.ts`
+  - `frontend/components/auth/AuthModal.tsx`
+  - `frontend/components/auth/AuthGate.tsx`
+  - `frontend/components/layout/Navbar.tsx`
+  - `frontend/components/layout/MobileDrawer.tsx`
+  - `frontend/app/dashboard/page.tsx`
+  - `frontend/app/mint/page.tsx`
+  - `frontend/components/provenance/RoleActionPanel.tsx`
+  - `frontend/app/admin/page.tsx`
+

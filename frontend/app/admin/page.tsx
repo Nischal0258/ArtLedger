@@ -20,13 +20,14 @@ import {
 } from "lucide-react";
 import { ARTLEDGER_ADDRESS, ARTLEDGER_ABI } from "@/lib/contract";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useDemoWallet } from "@/lib/demoWallet";
 import { ConfirmModal } from "@/components/ui/ConfirmModal";
 import { RoleBadge } from "@/components/ui/RoleBadge";
 import { AuthGate } from "@/components/auth/AuthGate";
 
 export default function AdminPage() {
-  const { isConnected } = useAccount();
-  const { isDefaultAdmin, roleHash } = useUserRole();
+  const { isConnected, isDefaultAdmin, roleHash, isDemoMode } = useUserRole();
+  const { executeDemoTransaction } = useDemoWallet();
 
   const [targetAddress, setTargetAddress] = useState("");
   const [selectedRoleType, setSelectedRoleType] = useState<
@@ -69,6 +70,19 @@ export default function AdminPage() {
       else if (selectedRoleType === "gallery") functionName = "grantGalleryRole";
       else if (selectedRoleType === "restorer") functionName = "grantRestorerRole";
       else if (selectedRoleType === "appraiser") functionName = "grantAppraiserRole";
+
+      if (isDemoMode) {
+        toast.info("Assigning role via Virtual Demo Administrator...");
+        await executeDemoTransaction({
+          functionName,
+          args: [targetAddress.trim() as `0x${string}`],
+        });
+
+        setIsConfirmOpen(false);
+        setTargetAddress("");
+        toast.success(`Role successfully assigned on-chain!`);
+        return;
+      }
 
       await writeContractAsync({
         address: ARTLEDGER_ADDRESS,

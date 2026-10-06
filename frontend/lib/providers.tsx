@@ -8,6 +8,9 @@ import "@rainbow-me/rainbowkit/styles.css";
 import { wagmiConfig } from "./wagmi";
 import { Toaster } from "sonner";
 import { AuthModal } from "@/components/auth/AuthModal";
+import { DemoWalletProvider, useDemoWallet } from "./demoWallet";
+
+export { useDemoWallet };
 
 // Theme Context
 type Theme = "light" | "dark";
@@ -97,27 +100,29 @@ export function Providers({ children }: { children: React.ReactNode }) {
           }
         >
           <ThemeContext.Provider value={{ theme, toggleTheme }}>
-            <AuthModalContext.Provider
-              value={{
-                isAuthModalOpen,
-                openAuthModal,
-                closeAuthModal,
-                authModalMode,
-              }}
-            >
-              {children}
-              <AuthModal
-                isOpen={isAuthModalOpen}
-                onClose={closeAuthModal}
-                initialMode={authModalMode}
-              />
-              <Toaster
-                position="bottom-right"
-                theme={theme}
-                richColors
-                closeButton
-              />
-            </AuthModalContext.Provider>
+            <DemoWalletProvider>
+              <AuthModalContext.Provider
+                value={{
+                  isAuthModalOpen,
+                  openAuthModal,
+                  closeAuthModal,
+                  authModalMode,
+                }}
+              >
+                {children}
+                <AuthModal
+                  isOpen={isAuthModalOpen}
+                  onClose={closeAuthModal}
+                  initialMode={authModalMode}
+                />
+                <Toaster
+                  position="bottom-right"
+                  theme={theme}
+                  richColors
+                  closeButton
+                />
+              </AuthModalContext.Provider>
+            </DemoWalletProvider>
           </ThemeContext.Provider>
         </RainbowKitProvider>
       </QueryClientProvider>

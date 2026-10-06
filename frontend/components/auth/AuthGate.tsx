@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { useAccount } from "wagmi";
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Lock, ShieldCheck, ArrowRight, Sparkles, Compass, Shield } from "lucide-react";
+import { Lock, ShieldCheck, ArrowRight, Sparkles, Compass, Shield, Laptop } from "lucide-react";
 import { useAuthModal } from "@/lib/providers";
+import { useUserRole } from "@/hooks/useUserRole";
+import { useDemoWallet } from "@/lib/demoWallet";
 
 interface AuthGateProps {
   children: React.ReactNode;
@@ -17,10 +17,11 @@ interface AuthGateProps {
 export function AuthGate({
   children,
   title = "Curator Authentication Required",
-  description = "This section is restricted to registered curators, artists, and institutional partners. Please connect your Web3 wallet to access your dashboard and tools.",
+  description = "This section is restricted to registered curators, artists, and institutional partners. Please connect your Web3 wallet or Virtual Demo Wallet to access your dashboard and tools.",
   requiredRole,
 }: AuthGateProps) {
-  const { isConnected } = useAccount();
+  const { isConnected } = useUserRole();
+  const { connectDemoWallet } = useDemoWallet();
   const { openAuthModal } = useAuthModal();
   const [mounted, setMounted] = useState(false);
 
@@ -59,7 +60,7 @@ export function AuthGate({
             </p>
           </div>
 
-          {/* Web3 Connect Action */}
+          {/* Web3 Connect & Demo Actions */}
           <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
             <button
               onClick={() => openAuthModal("login")}
@@ -68,6 +69,14 @@ export function AuthGate({
             >
               <Sparkles className="w-4 h-4" />
               <span>Sign In</span>
+            </button>
+
+            <button
+              onClick={() => connectDemoWallet("admin")}
+              type="button"
+              className="w-full sm:w-auto px-5 py-3.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 font-semibold text-sm transition-colors flex items-center justify-center gap-2"
+            >
+              <span>🎭 Demo Wallet</span>
             </button>
 
             <Link

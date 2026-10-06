@@ -15,9 +15,12 @@ import {
   Landmark,
   Hammer,
   BadgeDollarSign,
-  Shield,
-  CheckCircle2,
+  ShieldAlert,
+  ChevronDown,
+  Layers,
+  Zap,
 } from "lucide-react";
+import { useDemoWallet, DEMO_PERSONAS, DemoPersona } from "@/lib/demoWallet";
 
 interface AuthModalProps {
   isOpen: boolean;
@@ -31,9 +34,19 @@ export function AuthModal({
   initialMode = "login",
 }: AuthModalProps) {
   const router = useRouter();
-  const { isConnected, address } = useAccount();
+  const { isConnected: isRealConnected } = useAccount();
   const { openConnectModal } = useConnectModal();
+  const {
+    isDemoMode,
+    activePersona,
+    connectDemoWallet,
+    switchDemoPersona,
+    disconnectDemoWallet,
+  } = useDemoWallet();
+
   const [mode, setMode] = useState<"login" | "signup">(initialMode);
+  const [showPersonaPicker, setShowPersonaPicker] = useState(false);
+  const [selectedPersonaId, setSelectedPersonaId] = useState("admin");
 
   useEffect(() => {
     setMode(initialMode);
@@ -41,11 +54,12 @@ export function AuthModal({
 
   // When connection succeeds while modal is open, congratulate and close
   useEffect(() => {
-    if (isConnected && isOpen) {
+    if (isRealConnected && isOpen) {
       toast.success("Signed in successfully! Welcome to your Curator Dashboard.");
       onClose();
+      router.push("/dashboard");
     }
-  }, [isConnected, isOpen, onClose]);
+  }, [isRealConnected, isOpen, onClose, router]);
 
   if (!isOpen) return null;
 
@@ -54,6 +68,32 @@ export function AuthModal({
       openConnectModal();
     } else {
       toast.error("Wallet connector initializing, please try again in a moment.");
+    }
+  };
+
+  const handleDemoSignIn = (personaId: string) => {
+    connectDemoWallet(personaId);
+    onClose();
+    router.push("/dashboard");
+  };
+
+  const selectedPersona =
+    DEMO_PERSONAS.find((p) => p.id === selectedPersonaId) || DEMO_PERSONAS[0];
+
+  const getPersonaIcon = (iconName: string) => {
+    switch (iconName) {
+      case "ShieldAlert":
+        return <ShieldAlert className="w-4 h-4 text-amber-500" />;
+      case "Landmark":
+        return <Landmark className="w-4 h-4 text-blue-500" />;
+      case "Hammer":
+        return <Hammer className="w-4 h-4 text-emerald-500" />;
+      case "BadgeDollarSign":
+        return <BadgeDollarSign className="w-4 h-4 text-yellow-500" />;
+      case "Palette":
+        return <Palette className="w-4 h-4 text-purple-500" />;
+      default:
+        return <Sparkles className="w-4 h-4 text-brand-500" />;
     }
   };
 
@@ -66,7 +106,7 @@ export function AuthModal({
       />
 
       {/* Modal Dialog Card */}
-      <div className="relative w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl p-6 sm:p-8 z-10 animate-fade-in space-y-6">
+      <div className="relative w-full max-w-lg bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl shadow-2xl p-6 sm:p-8 z-10 animate-fade-in space-y-6 max-h-[92vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-start justify-between">
           <div className="flex items-center gap-3">
@@ -116,111 +156,113 @@ export function AuthModal({
           </button>
         </div>
 
-        {/* Tab 1: Sign In Content */}
-        {mode === "login" && (
-          <div className="space-y-4">
-            <div className="space-y-1.5">
-              <h4 className="text-sm font-bold text-slate-900 dark:text-white">
-                Curator Sign In
-              </h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                Connect your Web3 Ethereum wallet (MetaMask, Coinbase, Rainbow, or WalletConnect). Your cryptographic key acts as your secure, passwordless identity.
-              </p>
-            </div>
-
-            <button
-              onClick={handleWalletConnect}
-              type="button"
-              className="w-full py-3.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs transition-all shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2 group"
-            >
-              <Wallet className="w-4 h-4" />
-              <span>Connect Wallet to Sign In</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </button>
-
-            <div className="p-3.5 rounded-xl bg-slate-50 dark:bg-slate-950/60 border border-slate-200/60 dark:border-slate-800/60 space-y-2">
-              <div className="text-[11px] font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                <Sparkles className="w-3.5 h-3.5 text-brand-500" />
-                <span>Zero-Trust Blockchain Security</span>
+        {/* ================= VIRTUAL DEMO WALLET (FEATURED) ================= */}
+        <div className="rounded-2xl border-2 border-brand-500/30 bg-gradient-to-b from-brand-500/10 via-brand-500/5 to-transparent p-4 sm:p-5 space-y-4 shadow-sm">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <span className="text-xl">🎭</span>
+              <div>
+                <h4 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <span>Virtual Demo Wallet</span>
+                  <span className="px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 text-[10px] font-semibold border border-emerald-500/20">
+                    Recommended
+                  </span>
+                </h4>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                  Instant sign in without MetaMask or browser extensions
+                </p>
               </div>
-              <p className="text-[11px] text-slate-500 leading-relaxed">
-                No email or password needed. All actions on ArtLedger are authenticated and timestamped directly on the Ethereum Sepolia ledger.
-              </p>
             </div>
           </div>
-        )}
 
-        {/* Tab 2: Sign Up / Register Content */}
-        {mode === "signup" && (
-          <div className="space-y-4">
-            <div className="space-y-1.5">
-              <h4 className="text-sm font-bold text-slate-900 dark:text-white">
-                New Curator Registration
-              </h4>
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                Get started in 3 simple steps to register physical artwork, verify media hashes, or log institutional provenance.
-              </p>
+          {/* Quick Persona Selector Dropdown / Grid */}
+          <div className="space-y-2">
+            <label className="text-[11px] font-bold text-slate-600 dark:text-slate-300 block">
+              Select Demo Curator Persona:
+            </label>
+            <div className="grid grid-cols-1 gap-2">
+              {DEMO_PERSONAS.map((persona) => {
+                const isSelected = selectedPersonaId === persona.id;
+                return (
+                  <button
+                    key={persona.id}
+                    type="button"
+                    onClick={() => setSelectedPersonaId(persona.id)}
+                    className={`flex items-start gap-3 p-2.5 rounded-xl border text-left transition-all ${
+                      isSelected
+                        ? "border-brand-500 bg-white dark:bg-slate-800 shadow-sm ring-1 ring-brand-500"
+                        : "border-slate-200/80 dark:border-slate-700/60 bg-white/60 dark:bg-slate-900/60 hover:bg-white dark:hover:bg-slate-850"
+                    }`}
+                  >
+                    <div className="p-2 rounded-lg bg-slate-100 dark:bg-slate-800 shrink-0 mt-0.5">
+                      {getPersonaIcon(persona.iconName)}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center justify-between gap-1">
+                        <span className="font-bold text-xs text-slate-900 dark:text-white truncate">
+                          {persona.name}
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400">
+                          {persona.roleName}
+                        </span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1">
+                        {persona.description}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
-
-            <div className="space-y-2.5 text-xs text-slate-600 dark:text-slate-300">
-              <div className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-50 dark:bg-slate-950/40">
-                <span className="w-5 h-5 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold flex items-center justify-center shrink-0 text-[10px]">
-                  1
-                </span>
-                <div>
-                  <span className="font-semibold text-slate-900 dark:text-white">
-                    Connect Ethereum Wallet:
-                  </span>
-                  <span className="text-[11px] text-slate-500 block">
-                    Your unique cryptographic address will identify your curated tokens.
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-50 dark:bg-slate-950/40">
-                <span className="w-5 h-5 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold flex items-center justify-center shrink-0 text-[10px]">
-                  2
-                </span>
-                <div>
-                  <span className="font-semibold text-slate-900 dark:text-white">
-                    Access Curator Dashboard:
-                  </span>
-                  <span className="text-[11px] text-slate-500 block">
-                    Launch registration wizards, forensic verifiers, and portfolio management.
-                  </span>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-2.5 p-2 rounded-lg bg-slate-50 dark:bg-slate-950/40">
-                <span className="w-5 h-5 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 font-bold flex items-center justify-center shrink-0 text-[10px]">
-                  3
-                </span>
-                <div>
-                  <span className="font-semibold text-slate-900 dark:text-white">
-                    Obtain Institutional Roles:
-                  </span>
-                  <span className="text-[11px] text-slate-500 block">
-                    Request Artist, Gallery, Restorer, or Appraiser signing authorities.
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <button
-              onClick={handleWalletConnect}
-              type="button"
-              className="w-full py-3.5 px-4 rounded-xl bg-brand-600 hover:bg-brand-700 text-white font-semibold text-xs transition-all shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2 group"
-            >
-              <Sparkles className="w-4 h-4" />
-              <span>Connect Wallet to Get Started</span>
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </button>
           </div>
-        )}
+
+          {/* Connect Demo Wallet CTA */}
+          <button
+            onClick={() => handleDemoSignIn(selectedPersonaId)}
+            type="button"
+            className="w-full py-3 px-4 rounded-xl bg-gradient-to-r from-brand-600 to-indigo-600 hover:from-brand-500 hover:to-indigo-500 text-white font-bold text-xs shadow-lg shadow-brand-500/25 flex items-center justify-center gap-2 group transition-all"
+          >
+            <Zap className="w-4 h-4 fill-white" />
+            <span>
+              {mode === "login" ? "Sign In as " : "Create Account as "}
+              {selectedPersona.name} ({selectedPersona.roleName})
+            </span>
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+          </button>
+        </div>
+
+        {/* Divider with 'OR' */}
+        <div className="relative flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-slate-200 dark:border-slate-800" />
+          </div>
+          <span className="relative px-3 bg-white dark:bg-slate-900 text-[11px] font-semibold text-slate-400 uppercase tracking-wider">
+            Or Real Web3 Wallet
+          </span>
+        </div>
+
+        {/* Real Web3 Wallet Connect Option */}
+        <div className="space-y-3">
+          <button
+            onClick={handleWalletConnect}
+            type="button"
+            className="w-full py-3 px-4 rounded-xl border border-slate-300 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-800 dark:text-slate-200 font-semibold text-xs transition-all flex items-center justify-center gap-2"
+          >
+            <Wallet className="w-4 h-4 text-slate-500" />
+            <span>Connect Web3 Wallet (MetaMask, Coinbase, Rainbow)</span>
+          </button>
+
+          <p className="text-[11px] text-center text-slate-400 leading-relaxed">
+            {mode === "login"
+              ? "Zero-trust blockchain authentication. Your cryptographic signature verifies your curator identity on Ethereum."
+              : "Registering connects your Ethereum address as a verified provenance node on ArtLedger."}
+          </p>
+        </div>
 
         {/* Local Testnet Hint */}
-        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-[10px] text-slate-400 text-center">
-          Supported: MetaMask, Coinbase, Rainbow, WalletConnect (Sepolia & Local Hardhat)
+        <div className="pt-2 border-t border-slate-100 dark:border-slate-800 text-[10px] text-slate-400 text-center flex items-center justify-center gap-2">
+          <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+          <span>Local Hardhat Node Active (Chain ID 31337)</span>
         </div>
       </div>
     </div>

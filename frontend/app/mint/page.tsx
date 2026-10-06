@@ -19,6 +19,7 @@ import {
 } from "lucide-react";
 import { ARTLEDGER_ADDRESS, ARTLEDGER_ABI } from "@/lib/contract";
 import { useUserRole } from "@/hooks/useUserRole";
+import { useDemoWallet } from "@/lib/demoWallet";
 import { computeSHA256 } from "@/lib/hash";
 import { uploadImageToIPFS } from "@/lib/ipfs";
 import { truncateHash } from "@/lib/formatters";
@@ -28,8 +29,8 @@ import { RoleBadge } from "@/components/ui/RoleBadge";
 import { AuthGate } from "@/components/auth/AuthGate";
 
 export default function MintPage() {
-  const { isConnected } = useAccount();
-  const { isArtist, isDefaultAdmin, roleHash } = useUserRole();
+  const { isConnected, isArtist, isDefaultAdmin, roleHash, isDemoMode } = useUserRole();
+  const { executeDemoTransaction } = useDemoWallet();
 
   // Form State
   const [file, setFile] = useState<File | null>(null);
@@ -103,6 +104,28 @@ export default function MintPage() {
   const executeMint = async () => {
     try {
       const tokenURI = `ipfs://${ipfsCID}/metadata.json`;
+
+      if (isDemoMode) {
+        toast.info("Registering artwork via Virtual Demo Wallet...");
+        await executeDemoTransaction({
+          functionName: "mintArtwork",
+          args: [
+            artistName.trim(),
+            title.trim(),
+            Number(year),
+            medium.trim(),
+            imageHash as `0x${string}`,
+            ipfsCID.trim(),
+            tokenURI,
+          ],
+        });
+
+        setIsConfirmOpen(false);
+        toast.success("Artwork minted and anchored to ledger successfully!");
+        confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
+        setMintedTokenId(0);
+        return;
+      }
 
       const tx = await writeContractAsync({
         address: ARTLEDGER_ADDRESS,
