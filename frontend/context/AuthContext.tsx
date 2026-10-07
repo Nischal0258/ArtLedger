@@ -159,6 +159,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(profile);
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+        localStorage.setItem("artledger_demo_persona_id", credentials.role.toLowerCase());
+        window.dispatchEvent(new Event("storage"));
       } catch (e) {
         console.error("Failed to store user profile:", e);
       }
@@ -186,6 +188,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(profile);
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(profile));
+        localStorage.setItem("artledger_demo_persona_id", role.toLowerCase());
+        window.dispatchEvent(new Event("storage"));
       } catch (e) {
         console.error("Failed to store user profile:", e);
       }
@@ -212,6 +216,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       };
       try {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+        localStorage.setItem("artledger_demo_persona_id", newRole.toLowerCase());
+        window.dispatchEvent(new Event("storage"));
       } catch (e) {
         console.error("Failed to update role in storage:", e);
       }
@@ -225,6 +231,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null);
     try {
       localStorage.removeItem(STORAGE_KEY);
+      localStorage.removeItem("artledger_demo_persona_id");
+      window.dispatchEvent(new Event("storage"));
     } catch (e) {
       console.error("Failed to clear auth storage:", e);
     }

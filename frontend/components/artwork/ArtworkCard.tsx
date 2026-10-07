@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Link from "next/link";
 import { Calendar, Layers, ShieldCheck, ArrowRight } from "lucide-react";
@@ -23,9 +25,9 @@ export function ArtworkCard({ tokenId }: ArtworkCardProps) {
   const imageUrl = mockArtwork?.imageUrl || resolveIPFSUrl(artwork.ipfsCID);
 
   return (
-    <div className="group rounded-2xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm overflow-hidden flex flex-col transition-all hover:shadow-lg hover:border-brand-500/50">
+    <div className="group rounded-3xl border border-[#EEE8E3] glass-panel overflow-hidden flex flex-col justify-between transition-all hover:shadow-md hover:border-[#FABED7]/80">
       {/* Image Banner */}
-      <div className="relative aspect-square w-full overflow-hidden bg-slate-100 dark:bg-slate-950">
+      <div className="relative aspect-square w-full overflow-hidden bg-white/60">
         <img
           src={imageUrl}
           alt={artwork.title}
@@ -35,44 +37,48 @@ export function ArtworkCard({ tokenId }: ArtworkCardProps) {
               "https://images.unsplash.com/photo-1579783902614-a3fb3927b675?auto=format&fit=crop&w=800&q=80";
           }}
         />
-        <div className="absolute top-3 right-3 px-2.5 py-1 rounded-full bg-black/60 backdrop-blur-md text-white text-[10px] font-mono font-bold tracking-wider">
+        <div className="absolute top-3 left-3 px-2.5 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-[#242633] text-[10px] font-mono font-bold tracking-wider border border-[#EEE8E3] shadow-xs">
           #{tokenId.toString()}
+        </div>
+        <div className="absolute top-3 right-3 px-2.5 py-0.5 rounded-full bg-[#49C98A] text-white text-[10px] font-bold shadow-xs flex items-center gap-1">
+          <ShieldCheck className="w-3 h-3" />
+          <span>Verified</span>
         </div>
       </div>
 
       {/* Details Body */}
       <div className="p-4 sm:p-5 flex-1 flex flex-col justify-between space-y-4">
         <div className="space-y-1">
-          <h3 className="font-bold text-base text-slate-900 dark:text-white group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors line-clamp-1">
+          <h3 className="font-bold text-base text-[#242633] group-hover:text-[#F07BAF] transition-colors line-clamp-1">
             {artwork.title}
           </h3>
-          <p className="text-xs text-slate-500 line-clamp-1">
-            By <span className="font-medium text-slate-700 dark:text-slate-300">{artwork.artistName}</span>
+          <p className="text-xs text-[#686878] line-clamp-1">
+            By <span className="font-semibold text-[#434553]">{artwork.artistName}</span>
           </p>
         </div>
 
         {/* Specs Badges */}
-        <div className="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 pt-2 border-t border-slate-100 dark:border-slate-800/80">
+        <div className="flex items-center gap-3 text-xs text-[#686878] pt-2 border-t border-[#EEE8E3]">
           <div className="flex items-center gap-1 text-[11px]">
-            <Calendar className="w-3.5 h-3.5 text-brand-500" />
+            <Calendar className="w-3.5 h-3.5 text-[#DBBA95]" />
             <span>{artwork.year}</span>
           </div>
           <div className="flex items-center gap-1 text-[11px] truncate max-w-[120px]">
-            <Layers className="w-3.5 h-3.5 text-brand-500 shrink-0" />
+            <Layers className="w-3.5 h-3.5 text-[#DBBA95] shrink-0" />
             <span className="truncate">{artwork.medium}</span>
           </div>
         </div>
 
         {/* Action Row */}
         <div className="pt-1 flex items-center justify-between text-xs">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-brand-500/10 text-brand-600 dark:text-brand-400 font-semibold text-[11px]">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#49C98A]/10 border border-[#49C98A]/30 text-[#1a7e4e] font-bold text-[11px]">
             <ShieldCheck className="w-3 h-3" />
             <span>{eventCount} {eventCount === 1 ? "Event" : "Events"}</span>
           </span>
 
           <Link
             href={`/artwork/${tokenId.toString()}`}
-            className="inline-flex items-center gap-1 font-semibold text-brand-600 dark:text-brand-400 hover:text-brand-700 dark:hover:text-brand-300 transition-colors"
+            className="inline-flex items-center gap-1 font-bold text-[#F07BAF] hover:text-[#242633] transition-colors"
           >
             <span>Timeline</span>
             <ArrowRight className="w-3.5 h-3.5" />

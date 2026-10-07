@@ -27,17 +27,17 @@ export function GalleryDashboardView() {
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Role Hero Banner */}
-      <div className="p-6 sm:p-8 rounded-3xl border border-blue-500/20 bg-gradient-to-tr from-blue-500/10 via-brand-500/5 to-transparent space-y-4">
+      <div className="p-6 sm:p-8 rounded-3xl glass-panel space-y-4">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold">
+            <div className="w-12 h-12 rounded-2xl bg-[#DBBA95]/20 text-[#855e30] flex items-center justify-center font-bold">
               <Landmark className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-blue-400 block">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#855e30] block">
                 Cultural Institution Console
               </span>
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+              <h2 className="text-xl sm:text-2xl font-black text-[#242633]">
                 Gallery Custody Management
               </h2>
             </div>
@@ -45,35 +45,35 @@ export function GalleryDashboardView() {
 
           <Link
             href={`/artwork/${selectedTokenId}`}
-            className="px-5 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs sm:text-sm shadow-lg shadow-blue-500/25 flex items-center gap-2 transition-all hover:scale-[1.02]"
+            className="px-5 py-3 rounded-2xl brand-gradient text-[#242633] font-extrabold text-xs sm:text-sm shadow-[0_4px_16px_-3px_rgba(240,123,175,0.45)] flex items-center gap-2 transition-all hover:scale-[1.02]"
           >
-            <ArrowRightLeft className="w-4 h-4" />
+            <ArrowRightLeft className="w-4 h-4 text-[#242633]" />
             <span>Log Custody Action on Token #{selectedTokenId}</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 text-[#242633]" />
           </Link>
         </div>
 
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
+        <p className="text-xs sm:text-sm text-[#686878] max-w-3xl leading-relaxed">
           As an accredited Fine Art Gallery, your cryptographic address possesses on-chain authorization to record legal acquisitions, secondary ownership transfers, international museum loans, and secure vault relocations.
         </p>
 
         {/* Quick Stats Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-          <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
-            <span className="text-[10px] text-slate-400 uppercase font-semibold block">Inventory Under Custody</span>
-            <span className="text-lg font-bold text-slate-900 dark:text-white">{galleryArtworks.length} Masterpieces</span>
+          <div className="p-3.5 rounded-2xl bg-white/80 border border-[#EEE8E3]">
+            <span className="text-[10px] text-[#686878] uppercase font-bold block">Inventory Under Custody</span>
+            <span className="text-lg font-bold text-[#242633]">{galleryArtworks.length} Masterpieces</span>
           </div>
-          <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
-            <span className="text-[10px] text-slate-400 uppercase font-semibold block">Active Exhibition Loans</span>
-            <span className="text-lg font-bold text-blue-400">3 Institutional</span>
+          <div className="p-3.5 rounded-2xl bg-white/80 border border-[#EEE8E3]">
+            <span className="text-[10px] text-[#686878] uppercase font-bold block">Active Exhibition Loans</span>
+            <span className="text-lg font-bold text-[#F07BAF]">3 Institutional</span>
           </div>
-          <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
-            <span className="text-[10px] text-slate-400 uppercase font-semibold block">Vault Security</span>
-            <span className="text-lg font-bold text-emerald-500">Freeport Tier 1</span>
+          <div className="p-3.5 rounded-2xl bg-white/80 border border-[#EEE8E3]">
+            <span className="text-[10px] text-[#686878] uppercase font-bold block">Vault Security</span>
+            <span className="text-lg font-bold text-[#1a7e4e]">Freeport Tier 1</span>
           </div>
-          <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
-            <span className="text-[10px] text-slate-400 uppercase font-semibold block">Signing Authority</span>
-            <span className="text-lg font-bold text-slate-900 dark:text-white">GALLERY_ROLE</span>
+          <div className="p-3.5 rounded-2xl bg-white/80 border border-[#EEE8E3]">
+            <span className="text-[10px] text-[#686878] uppercase font-bold block">Signing Authority</span>
+            <span className="text-lg font-bold text-[#242633]">GALLERY_ROLE</span>
           </div>
         </div>
       </div>
@@ -81,77 +81,77 @@ export function GalleryDashboardView() {
       {/* Gallery Action Workflows */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Action 1: Custody Transfer */}
-        <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-4">
-          <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 w-fit">
+        <div className="p-6 rounded-3xl glass-panel space-y-4">
+          <div className="p-2.5 rounded-2xl bg-[#DBBA95]/20 text-[#855e30] w-fit">
             <ArrowRightLeft className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">
+            <h3 className="font-bold text-base text-[#242633]">
               Ownership & Custody Transfer
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#686878]">
               Acquisition & Secondary Market
             </p>
           </div>
-          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          <p className="text-xs text-[#686878] leading-relaxed">
             Record institutional acquisitions, private treaty sales, or consignment handovers with cryptographic proof of delivery.
           </p>
           <Link
             href={`/artwork/${selectedTokenId}`}
-            className="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 font-semibold text-xs flex items-center justify-center gap-2 transition-colors text-slate-900 dark:text-white"
+            className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#F7F3F0] border border-[#EEE8E3] font-bold text-xs flex items-center justify-center gap-2 transition-colors text-[#242633] shadow-xs"
           >
             <span>Record Transfer on #{selectedTokenId}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#686878]" />
           </Link>
         </div>
 
         {/* Action 2: Museum Exhibition Loan */}
-        <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-4">
-          <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 w-fit">
+        <div className="p-6 rounded-3xl glass-panel space-y-4">
+          <div className="p-2.5 rounded-2xl bg-[#49C98A]/15 text-[#1a7e4e] w-fit">
             <Landmark className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">
+            <h3 className="font-bold text-base text-[#242633]">
               Museum Exhibition Loan
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#686878]">
               Curatorial Display Tracking
             </p>
           </div>
-          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          <p className="text-xs text-[#686878] leading-relaxed">
             Record temporary museum display agreements, retrospective loans, and international cultural showcase venues.
           </p>
           <Link
             href={`/artwork/${selectedTokenId}`}
-            className="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 font-semibold text-xs flex items-center justify-center gap-2 transition-colors text-slate-900 dark:text-white"
+            className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#F7F3F0] border border-[#EEE8E3] font-bold text-xs flex items-center justify-center gap-2 transition-colors text-[#242633] shadow-xs"
           >
             <span>Log Museum Loan on #{selectedTokenId}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#686878]" />
           </Link>
         </div>
 
         {/* Action 3: Vault Relocation */}
-        <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-4">
-          <div className="p-2.5 rounded-xl bg-amber-500/10 text-amber-400 w-fit">
+        <div className="p-6 rounded-3xl glass-panel space-y-4">
+          <div className="p-2.5 rounded-2xl bg-[#F5A623]/15 text-[#a86500] w-fit">
             <Box className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">
+            <h3 className="font-bold text-base text-[#242633]">
               Vault & Storage Relocation
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#686878]">
               Physical Location Timestamp
             </p>
           </div>
-          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          <p className="text-xs text-[#686878] leading-relaxed">
             Record movement between climate-controlled vaults, Freeport facilities, and private collector storage chambers.
           </p>
           <Link
             href={`/artwork/${selectedTokenId}`}
-            className="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 font-semibold text-xs flex items-center justify-center gap-2 transition-colors text-slate-900 dark:text-white"
+            className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#F7F3F0] border border-[#EEE8E3] font-bold text-xs flex items-center justify-center gap-2 transition-colors text-[#242633] shadow-xs"
           >
             <span>Log Vault Storage on #{selectedTokenId}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#686878]" />
           </Link>
         </div>
       </div>
@@ -159,13 +159,13 @@ export function GalleryDashboardView() {
       {/* Gallery Inventory */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <Landmark className="w-4 h-4 text-blue-400" />
+          <h3 className="text-lg font-bold text-[#242633] flex items-center gap-2">
+            <Landmark className="w-4 h-4 text-[#DBBA95]" />
             <span>Artworks Under Gallery Custody ({galleryArtworks.length})</span>
           </h3>
           <Link
             href="/explore"
-            className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline"
+            className="text-xs font-bold text-[#F07BAF] hover:text-[#242633] transition-colors"
           >
             View Full Registry →
           </Link>
@@ -176,8 +176,8 @@ export function GalleryDashboardView() {
             <div
               key={a.tokenId}
               onClick={() => setSelectedTokenId(a.tokenId)}
-              className={`cursor-pointer rounded-2xl transition-all ${
-                selectedTokenId === a.tokenId ? "ring-2 ring-blue-500 scale-[1.01]" : ""
+              className={`cursor-pointer rounded-3xl transition-all ${
+                selectedTokenId === a.tokenId ? "ring-2 ring-[#F07BAF] scale-[1.01]" : ""
               }`}
             >
               <ArtworkCard tokenId={a.tokenId} />

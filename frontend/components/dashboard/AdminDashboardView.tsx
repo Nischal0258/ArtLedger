@@ -100,17 +100,17 @@ export function AdminDashboardView() {
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Role Hero Banner */}
-      <div className="p-6 sm:p-8 rounded-3xl border border-rose-500/20 bg-gradient-to-tr from-rose-500/10 via-brand-500/5 to-transparent space-y-4">
+      <div className="p-6 sm:p-8 rounded-3xl glass-panel space-y-4">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center font-bold">
+            <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold border border-rose-200">
               <Shield className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-rose-400 block">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-rose-600 block">
                 Protocol Authority Console
               </span>
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+              <h2 className="text-xl sm:text-2xl font-black text-[#242633]">
                 Root Governance & Registry Admin
               </h2>
             </div>
@@ -118,35 +118,35 @@ export function AdminDashboardView() {
 
           <Link
             href="/admin"
-            className="px-5 py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs sm:text-sm shadow-lg shadow-rose-500/25 flex items-center gap-2 transition-all hover:scale-[1.02]"
+            className="px-5 py-3 rounded-2xl brand-gradient text-[#242633] font-extrabold text-xs sm:text-sm shadow-[0_4px_16px_-3px_rgba(240,123,175,0.45)] flex items-center gap-2 transition-all hover:scale-[1.02]"
           >
-            <ShieldCheck className="w-4 h-4" />
+            <ShieldCheck className="w-4 h-4 text-[#242633]" />
             <span>Open Dedicated Role Manager</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 text-[#242633]" />
           </Link>
         </div>
 
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
-          As the ArtLedger Root Administrator, you hold the highest administrative authority (<code className="text-rose-400 font-mono">DEFAULT_ADMIN_ROLE</code>). You authorize trusted cultural institutions, conservators, galleries, and certified appraisers into the decentralized provenance ecosystem.
+        <p className="text-xs sm:text-sm text-[#686878] max-w-3xl leading-relaxed">
+          As the ArtLedger Root Administrator, you hold the highest administrative authority (<code className="text-[#242633] font-mono bg-white/80 px-1.5 py-0.5 rounded-lg border border-[#EEE8E3]">DEFAULT_ADMIN_ROLE</code>). You authorize trusted cultural institutions, conservators, galleries, and certified appraisers into the decentralized provenance ecosystem.
         </p>
 
         {/* Quick Stats Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-          <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/50 dark:border-slate-800/50">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Active Entities</span>
-            <span className="text-lg font-black text-slate-900 dark:text-white">5 Curators</span>
+          <div className="p-3.5 rounded-2xl bg-white/80 border border-[#EEE8E3]">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#686878] block">Active Entities</span>
+            <span className="text-lg font-black text-[#242633]">5 Curators</span>
           </div>
-          <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/50 dark:border-slate-800/50">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Masterpieces</span>
-            <span className="text-lg font-black text-rose-500">{MOCK_ARTWORKS.length} Minted</span>
+          <div className="p-3.5 rounded-2xl bg-white/80 border border-[#EEE8E3]">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#686878] block">Masterpieces</span>
+            <span className="text-lg font-black text-rose-600">{MOCK_ARTWORKS.length} Minted</span>
           </div>
-          <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/50 dark:border-slate-800/50">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Role Access</span>
-            <span className="text-lg font-black text-emerald-500">RBAC Verified</span>
+          <div className="p-3.5 rounded-2xl bg-white/80 border border-[#EEE8E3]">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#686878] block">Role Access</span>
+            <span className="text-lg font-black text-[#1a7e4e]">RBAC Verified</span>
           </div>
-          <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/50 dark:border-slate-800/50">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">Ledger Integrity</span>
-            <span className="text-lg font-black text-brand-500">100% Cryptographic</span>
+          <div className="p-3.5 rounded-2xl bg-white/80 border border-[#EEE8E3]">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-[#686878] block">Ledger Integrity</span>
+            <span className="text-lg font-black text-[#DBBA95]">100% Cryptographic</span>
           </div>
         </div>
       </div>
@@ -155,16 +155,16 @@ export function AdminDashboardView() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Left Column: Quick Role Granting */}
         <div className="lg:col-span-6 space-y-6">
-          <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm space-y-6">
+          <div className="p-6 rounded-3xl glass-panel space-y-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-rose-500/10 text-rose-500 flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center font-bold border border-rose-200">
                 <UserPlus className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                <h3 className="text-base font-bold text-[#242633]">
                   Grant Institutional Credential
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
+                <p className="text-xs text-[#686878]">
                   Assign on-chain permission to a cryptographic address
                 </p>
               </div>
@@ -172,7 +172,7 @@ export function AdminDashboardView() {
 
             <form onSubmit={handleGrantRole} className="space-y-4">
               <div className="space-y-1.5">
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label className="text-xs font-semibold text-[#434553]">
                   Target Ethereum Address
                 </label>
                 <input
@@ -181,20 +181,20 @@ export function AdminDashboardView() {
                   placeholder="0x..."
                   value={targetAddress}
                   onChange={(e) => setTargetAddress(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-950 text-xs sm:text-sm font-mono focus:outline-none focus:ring-1 focus:ring-rose-500"
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-[#EEE8E3] bg-white/80 text-xs sm:text-sm font-mono text-[#242633] placeholder:text-[#686878]/60 focus:outline-none focus:ring-2 focus:ring-[#FABED7]/40 focus:border-[#F07BAF]"
                 />
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                <label className="text-xs font-semibold text-[#434553]">
                   Select Role Authority
                 </label>
                 <div className="grid grid-cols-2 gap-2">
                   {[
-                    { id: "artist", title: "Artist", icon: Palette, color: "text-purple-400" },
-                    { id: "gallery", title: "Gallery", icon: Landmark, color: "text-blue-400" },
-                    { id: "restorer", title: "Restorer", icon: Hammer, color: "text-emerald-400" },
-                    { id: "appraiser", title: "Appraiser", icon: BadgeDollarSign, color: "text-yellow-400" },
+                    { id: "artist", title: "Artist", icon: Palette, color: "text-[#F07BAF]" },
+                    { id: "gallery", title: "Gallery", icon: Landmark, color: "text-[#DBBA95]" },
+                    { id: "restorer", title: "Restorer", icon: Hammer, color: "text-[#49C98A]" },
+                    { id: "appraiser", title: "Appraiser", icon: BadgeDollarSign, color: "text-[#F5A623]" },
                   ].map((role) => {
                     const Icon = role.icon;
                     const isSelected = selectedRoleType === role.id;
@@ -203,10 +203,10 @@ export function AdminDashboardView() {
                         key={role.id}
                         type="button"
                         onClick={() => setSelectedRoleType(role.id as any)}
-                        className={`p-3 rounded-xl border text-left flex items-center gap-2.5 transition-all ${
+                        className={`p-3 rounded-2xl border text-left flex items-center gap-2.5 transition-all ${
                           isSelected
-                            ? "border-rose-500 bg-rose-500/10 text-slate-900 dark:text-white"
-                            : "border-slate-200 dark:border-slate-800 hover:border-slate-300 dark:hover:border-slate-700 bg-slate-50 dark:bg-slate-950/50 text-slate-600 dark:text-slate-400"
+                            ? "border-[#F07BAF] bg-[#FABED7]/20 text-[#242633] ring-1 ring-[#F07BAF]"
+                            : "border-[#EEE8E3] hover:border-[#DBBA95] bg-white/70 text-[#686878]"
                         }`}
                       >
                         <Icon className={`w-4 h-4 ${role.color}`} />
@@ -220,47 +220,47 @@ export function AdminDashboardView() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full py-3 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs sm:text-sm shadow-lg shadow-rose-500/25 flex items-center justify-center gap-2 transition-all disabled:opacity-50"
+                className="w-full py-3 rounded-2xl brand-gradient hover:opacity-95 text-[#242633] font-extrabold text-xs sm:text-sm shadow-[0_4px_16px_-3px_rgba(240,123,175,0.45)] flex items-center justify-center gap-2 transition-all disabled:opacity-50 hover:scale-[1.01]"
               >
-                <UserPlus className="w-4 h-4" />
+                <UserPlus className="w-4 h-4 text-[#242633]" />
                 <span>{isSubmitting ? "Granting Role..." : "Authorize Institutional Role"}</span>
               </button>
             </form>
           </div>
 
           {/* Institutional Personas Directory */}
-          <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Users className="w-4 h-4 text-rose-500" />
+          <div className="p-6 rounded-3xl glass-panel space-y-4">
+            <h3 className="text-sm font-bold text-[#242633] flex items-center gap-2">
+              <Users className="w-4 h-4 text-rose-600" />
               <span>Certified Curator Directory</span>
             </h3>
             <div className="space-y-2.5">
               {DEMO_PERSONAS.map((persona) => (
                 <div
                   key={persona.address}
-                  className="p-3 rounded-2xl border border-slate-100 dark:border-slate-800/80 bg-slate-50/50 dark:bg-slate-950/40 flex items-center justify-between gap-3 text-xs"
+                  className="p-3 rounded-2xl border border-[#EEE8E3] bg-white/70 flex items-center justify-between gap-3 text-xs"
                 >
                   <div className="flex items-center gap-2.5 min-w-0">
-                    <div className="w-8 h-8 rounded-lg bg-slate-200 dark:bg-slate-800 flex items-center justify-center font-bold shrink-0">
+                    <div className="w-8 h-8 rounded-xl brand-gradient text-[#242633] flex items-center justify-center font-bold shrink-0">
                       {persona.name.charAt(0)}
                     </div>
                     <div className="min-w-0">
-                      <p className="font-bold text-slate-900 dark:text-white truncate">
+                      <p className="font-bold text-[#242633] truncate">
                         {persona.name}
                       </p>
-                      <p className="text-[10px] text-slate-500 truncate font-mono">
+                      <p className="text-[10px] text-[#686878] truncate font-mono">
                         {persona.address.slice(0, 8)}...{persona.address.slice(-6)}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300">
+                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#F7F3F0] text-[#434553] border border-[#EEE8E3]">
                       {persona.roleName}
                     </span>
                     <button
                       type="button"
                       onClick={() => setTargetAddress(persona.address)}
-                      className="text-[11px] font-semibold text-rose-500 hover:text-rose-600 underline"
+                      className="text-[11px] font-bold text-[#F07BAF] hover:text-[#242633] transition-colors"
                     >
                       Autofill
                     </button>
@@ -273,79 +273,79 @@ export function AdminDashboardView() {
 
         {/* Right Column: Governance Protocols & Smart Contract Info */}
         <div className="lg:col-span-6 space-y-6">
-          <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm space-y-4">
+          <div className="p-6 rounded-3xl glass-panel space-y-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-brand-500/10 text-brand-500 flex items-center justify-center font-bold">
+              <div className="w-10 h-10 rounded-2xl brand-gradient text-[#242633] flex items-center justify-center font-bold shadow-xs">
                 <Activity className="w-5 h-5" />
               </div>
               <div>
-                <h3 className="text-base font-bold text-slate-900 dark:text-white">
+                <h3 className="text-base font-bold text-[#242633]">
                   Smart Contract Architecture
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400">
+                <p className="text-xs text-[#686878]">
                   On-chain security & multi-role configuration
                 </p>
               </div>
             </div>
 
             <div className="space-y-3 pt-2 text-xs">
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 space-y-1">
-                <span className="text-[10px] font-bold uppercase text-slate-400">Contract Address</span>
-                <p className="font-mono text-slate-900 dark:text-white break-all">
+              <div className="p-3 rounded-2xl bg-white/80 border border-[#EEE8E3] space-y-1">
+                <span className="text-[10px] font-bold uppercase text-[#686878]">Contract Address</span>
+                <p className="font-mono text-[#242633] break-all font-semibold">
                   {ARTLEDGER_ADDRESS}
                 </p>
               </div>
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 flex justify-between items-center">
-                <span className="text-slate-600 dark:text-slate-400">ERC-721 Standard</span>
-                <span className="font-bold text-emerald-500">ERC721Enumerable Compliant</span>
+              <div className="p-3 rounded-2xl bg-white/80 border border-[#EEE8E3] flex justify-between items-center">
+                <span className="text-[#686878]">ERC-721 Standard</span>
+                <span className="font-bold text-[#1a7e4e]">ERC721Enumerable Compliant</span>
               </div>
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 flex justify-between items-center">
-                <span className="text-slate-600 dark:text-slate-400">Access Control Model</span>
-                <span className="font-bold text-brand-500">OpenZeppelin AccessControl</span>
+              <div className="p-3 rounded-2xl bg-white/80 border border-[#EEE8E3] flex justify-between items-center">
+                <span className="text-[#686878]">Access Control Model</span>
+                <span className="font-bold text-[#855e30]">OpenZeppelin AccessControl</span>
               </div>
-              <div className="p-3 rounded-xl bg-slate-50 dark:bg-slate-950 border border-slate-100 dark:border-slate-800 flex justify-between items-center">
-                <span className="text-slate-600 dark:text-slate-400">Cryptographic Digest</span>
-                <span className="font-bold text-purple-400">SHA-256 Collision Proof</span>
+              <div className="p-3 rounded-2xl bg-white/80 border border-[#EEE8E3] flex justify-between items-center">
+                <span className="text-[#686878]">Cryptographic Digest</span>
+                <span className="font-bold text-[#a8245e]">SHA-256 Collision Proof</span>
               </div>
             </div>
           </div>
 
           {/* Quick Shortcuts */}
-          <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-sm space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-white flex items-center gap-2">
-              <Sparkles className="w-4 h-4 text-brand-500" />
+          <div className="p-6 rounded-3xl glass-panel space-y-4">
+            <h3 className="text-sm font-bold text-[#242633] flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-[#F07BAF]" />
               <span>Administrative Tools</span>
             </h3>
             <div className="grid grid-cols-2 gap-3">
               <Link
                 href="/verify"
-                className="p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 hover:border-brand-500/50 hover:bg-brand-500/5 transition-all group flex flex-col justify-between"
+                className="p-4 rounded-2xl border border-[#EEE8E3] bg-white/80 hover:border-[#F07BAF] transition-all group flex flex-col justify-between shadow-xs"
               >
                 <div className="space-y-1">
-                  <p className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-brand-500">
+                  <p className="font-bold text-xs text-[#242633] group-hover:text-[#F07BAF]">
                     Forensic Verifier
                   </p>
-                  <p className="text-[11px] text-slate-500 leading-snug">
+                  <p className="text-[11px] text-[#686878] leading-snug">
                     Inspect digital signatures and hash authenticity
                   </p>
                 </div>
-                <span className="text-[10px] font-bold text-brand-500 flex items-center gap-1 mt-2">
+                <span className="text-[10px] font-bold text-[#F07BAF] flex items-center gap-1 mt-3">
                   Launch <ArrowRight className="w-3 h-3" />
                 </span>
               </Link>
               <Link
                 href="/explore"
-                className="p-3.5 rounded-2xl border border-slate-100 dark:border-slate-800 bg-slate-50/70 dark:bg-slate-950/60 hover:border-brand-500/50 hover:bg-brand-500/5 transition-all group flex flex-col justify-between"
+                className="p-4 rounded-2xl border border-[#EEE8E3] bg-white/80 hover:border-[#F07BAF] transition-all group flex flex-col justify-between shadow-xs"
               >
                 <div className="space-y-1">
-                  <p className="font-bold text-xs text-slate-900 dark:text-white group-hover:text-brand-500">
+                  <p className="font-bold text-xs text-[#242633] group-hover:text-[#F07BAF]">
                     Registry Explorer
                   </p>
-                  <p className="text-[11px] text-slate-500 leading-snug">
+                  <p className="text-[11px] text-[#686878] leading-snug">
                     Browse all cataloged museum-grade artworks
                   </p>
                 </div>
-                <span className="text-[10px] font-bold text-brand-500 flex items-center gap-1 mt-2">
+                <span className="text-[10px] font-bold text-[#F07BAF] flex items-center gap-1 mt-3">
                   Browse <ArrowRight className="w-3 h-3" />
                 </span>
               </Link>
@@ -358,17 +358,17 @@ export function AdminDashboardView() {
       <div className="space-y-4 pt-4">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-xl font-black text-slate-900 dark:text-white flex items-center gap-2">
-              <Layers className="w-5 h-5 text-rose-500" />
+            <h3 className="text-xl font-black text-[#242633] flex items-center gap-2">
+              <Layers className="w-5 h-5 text-rose-600" />
               <span>Catalog Masterpieces ({MOCK_ARTWORKS.length})</span>
             </h3>
-            <p className="text-xs text-slate-500 dark:text-slate-400">
+            <p className="text-xs text-[#686878]">
               Complete on-chain index under administrative supervision
             </p>
           </div>
           <Link
             href="/explore"
-            className="text-xs font-bold text-rose-500 hover:text-rose-600 flex items-center gap-1"
+            className="text-xs font-bold text-[#F07BAF] hover:text-[#242633] flex items-center gap-1 transition-colors"
           >
             <span>View All</span>
             <ExternalLink className="w-3.5 h-3.5" />

@@ -27,17 +27,17 @@ export function AppraiserDashboardView() {
   return (
     <div className="space-y-8 animate-fade-in">
       {/* Role Hero Banner */}
-      <div className="p-6 sm:p-8 rounded-3xl border border-yellow-500/20 bg-gradient-to-tr from-yellow-500/10 via-brand-500/5 to-transparent space-y-4">
+      <div className="p-6 sm:p-8 rounded-3xl glass-panel space-y-4">
         <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-2xl bg-yellow-500/20 text-yellow-400 flex items-center justify-center font-bold">
+            <div className="w-12 h-12 rounded-2xl bg-[#F5A623]/20 text-[#a86500] flex items-center justify-center font-bold">
               <BadgeDollarSign className="w-6 h-6" />
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-yellow-400 block">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-[#a86500] block">
                 Valuation Authority Console
               </span>
-              <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+              <h2 className="text-xl sm:text-2xl font-black text-[#242633]">
                 Appraisal & Authenticity Certification
               </h2>
             </div>
@@ -45,35 +45,35 @@ export function AppraiserDashboardView() {
 
           <Link
             href={`/artwork/${selectedTokenId}`}
-            className="px-5 py-3 rounded-xl bg-yellow-500 hover:bg-yellow-600 text-slate-950 font-bold text-xs sm:text-sm shadow-lg shadow-yellow-500/25 flex items-center gap-2 transition-all hover:scale-[1.02]"
+            className="px-5 py-3 rounded-2xl brand-gradient text-[#242633] font-extrabold text-xs sm:text-sm shadow-[0_4px_16px_-3px_rgba(240,123,175,0.45)] flex items-center gap-2 transition-all hover:scale-[1.02]"
           >
-            <Award className="w-4 h-4" />
+            <Award className="w-4 h-4 text-[#242633]" />
             <span>Certify Valuation on Token #{selectedTokenId}</span>
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4 text-[#242633]" />
           </Link>
         </div>
 
-        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 max-w-3xl leading-relaxed">
+        <p className="text-xs sm:text-sm text-[#686878] max-w-3xl leading-relaxed">
           As an accredited Fine Art Appraiser and Authenticity Authority, you possess exclusive signing permissions to issue certified market valuations, grade physical condition, and anchor independent insurance underwriting ratings to the blockchain.
         </p>
 
         {/* Quick Stats Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-          <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
-            <span className="text-[10px] text-slate-400 uppercase font-semibold block">Certified Portfolio</span>
-            <span className="text-lg font-bold text-slate-900 dark:text-white">$580,000,000+ USD</span>
+          <div className="p-3.5 rounded-2xl bg-white/80 border border-[#EEE8E3]">
+            <span className="text-[10px] text-[#686878] uppercase font-bold block">Certified Portfolio</span>
+            <span className="text-lg font-bold text-[#242633]">$580,000,000+ USD</span>
           </div>
-          <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
-            <span className="text-[10px] text-slate-400 uppercase font-semibold block">Appraisals Issued</span>
-            <span className="text-lg font-bold text-yellow-400">18 Certificates</span>
+          <div className="p-3.5 rounded-2xl bg-white/80 border border-[#EEE8E3]">
+            <span className="text-[10px] text-[#686878] uppercase font-bold block">Appraisals Issued</span>
+            <span className="text-lg font-bold text-[#a86500]">18 Certificates</span>
           </div>
-          <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
-            <span className="text-[10px] text-slate-400 uppercase font-semibold block">Discrepancy Catch Rate</span>
-            <span className="text-lg font-bold text-emerald-500">100% Precise</span>
+          <div className="p-3.5 rounded-2xl bg-white/80 border border-[#EEE8E3]">
+            <span className="text-[10px] text-[#686878] uppercase font-bold block">Discrepancy Catch Rate</span>
+            <span className="text-lg font-bold text-[#1a7e4e]">100% Precise</span>
           </div>
-          <div className="p-3 rounded-xl bg-white/60 dark:bg-slate-900/60 border border-slate-200/80 dark:border-slate-800">
-            <span className="text-[10px] text-slate-400 uppercase font-semibold block">Signing Authority</span>
-            <span className="text-lg font-bold text-slate-900 dark:text-white">APPRAISER_ROLE</span>
+          <div className="p-3.5 rounded-2xl bg-white/80 border border-[#EEE8E3]">
+            <span className="text-[10px] text-[#686878] uppercase font-bold block">Signing Authority</span>
+            <span className="text-lg font-bold text-[#242633]">APPRAISER_ROLE</span>
           </div>
         </div>
       </div>
@@ -81,77 +81,77 @@ export function AppraiserDashboardView() {
       {/* Appraiser Action Workflows */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Action 1: Official Valuation Attestation */}
-        <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-4">
-          <div className="p-2.5 rounded-xl bg-yellow-500/10 text-yellow-400 w-fit">
+        <div className="p-6 rounded-3xl glass-panel space-y-4">
+          <div className="p-2.5 rounded-2xl bg-[#F5A623]/20 text-[#a86500] w-fit">
             <BadgeDollarSign className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">
+            <h3 className="font-bold text-base text-[#242633]">
               Official Valuation Certificate
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#686878]">
               USD Market Attestation
             </p>
           </div>
-          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          <p className="text-xs text-[#686878] leading-relaxed">
             Record certified market valuations based on recent auction sales, artist historical index, and physical condition.
           </p>
           <Link
             href={`/artwork/${selectedTokenId}`}
-            className="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 font-semibold text-xs flex items-center justify-center gap-2 transition-colors text-slate-900 dark:text-white"
+            className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#F7F3F0] border border-[#EEE8E3] font-bold text-xs flex items-center justify-center gap-2 transition-colors text-[#242633] shadow-xs"
           >
             <span>Record Valuation on #{selectedTokenId}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#686878]" />
           </Link>
         </div>
 
         {/* Action 2: Authenticity Forensic Inspection */}
-        <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-4">
-          <div className="p-2.5 rounded-xl bg-blue-500/10 text-blue-400 w-fit">
+        <div className="p-6 rounded-3xl glass-panel space-y-4">
+          <div className="p-2.5 rounded-2xl bg-[#DBBA95]/20 text-[#855e30] w-fit">
             <FileSearch className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">
+            <h3 className="font-bold text-base text-[#242633]">
               Authenticity Audit Verifier
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#686878]">
               Pre-Auction Forensics
             </p>
           </div>
-          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          <p className="text-xs text-[#686878] leading-relaxed">
             Run zero-trust cryptographic verification between auction catalog photographs and on-chain SHA-256 genesis hashes.
           </p>
           <Link
             href="/verify"
-            className="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 font-semibold text-xs flex items-center justify-center gap-2 transition-colors text-slate-900 dark:text-white"
+            className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#F7F3F0] border border-[#EEE8E3] font-bold text-xs flex items-center justify-center gap-2 transition-colors text-[#242633] shadow-xs"
           >
             <span>Open Forensic Verifier</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#686878]" />
           </Link>
         </div>
 
         {/* Action 3: Insurance Underwriting Rating */}
-        <div className="p-6 rounded-3xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 space-y-4">
-          <div className="p-2.5 rounded-xl bg-emerald-500/10 text-emerald-400 w-fit">
+        <div className="p-6 rounded-3xl glass-panel space-y-4">
+          <div className="p-2.5 rounded-2xl bg-[#49C98A]/15 text-[#1a7e4e] w-fit">
             <Award className="w-5 h-5" />
           </div>
           <div>
-            <h3 className="font-bold text-base text-slate-900 dark:text-white">
+            <h3 className="font-bold text-base text-[#242633]">
               Insurance Risk Certification
             </h3>
-            <p className="text-xs text-slate-500">
+            <p className="text-xs text-[#686878]">
               Institutional Underwriting
             </p>
           </div>
-          <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+          <p className="text-xs text-[#686878] leading-relaxed">
             Assign investment-grade rating (Grade A1 Museum Quality, Grade A Investment Grade) and issue coverage certificates.
           </p>
           <Link
             href={`/artwork/${selectedTokenId}`}
-            className="w-full py-2.5 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 font-semibold text-xs flex items-center justify-center gap-2 transition-colors text-slate-900 dark:text-white"
+            className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#F7F3F0] border border-[#EEE8E3] font-bold text-xs flex items-center justify-center gap-2 transition-colors text-[#242633] shadow-xs"
           >
             <span>Log Rating on #{selectedTokenId}</span>
-            <ArrowRight className="w-3.5 h-3.5" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#686878]" />
           </Link>
         </div>
       </div>
@@ -159,13 +159,13 @@ export function AppraiserDashboardView() {
       {/* Appraised Works Portfolio */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="text-lg font-bold text-slate-900 dark:text-white flex items-center gap-2">
-            <BadgeCheck className="w-4 h-4 text-yellow-400" />
+          <h3 className="text-lg font-bold text-[#242633] flex items-center gap-2">
+            <BadgeCheck className="w-4 h-4 text-[#F5A623]" />
             <span>Artworks in Valuation Portfolio ({appraisedArtworks.length})</span>
           </h3>
           <Link
             href="/explore"
-            className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline"
+            className="text-xs font-bold text-[#F07BAF] hover:text-[#242633] transition-colors"
           >
             Explore Master Registry →
           </Link>
@@ -176,8 +176,8 @@ export function AppraiserDashboardView() {
             <div
               key={a.tokenId}
               onClick={() => setSelectedTokenId(a.tokenId)}
-              className={`cursor-pointer rounded-2xl transition-all ${
-                selectedTokenId === a.tokenId ? "ring-2 ring-yellow-500 scale-[1.01]" : ""
+              className={`cursor-pointer rounded-3xl transition-all ${
+                selectedTokenId === a.tokenId ? "ring-2 ring-[#F5A623] scale-[1.01]" : ""
               }`}
             >
               <ArtworkCard tokenId={a.tokenId} />

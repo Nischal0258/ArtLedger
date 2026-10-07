@@ -22,7 +22,6 @@ import { useArtwork } from "@/hooks/useArtwork";
 import { computeSHA256 } from "@/lib/hash";
 import { truncateHash } from "@/lib/formatters";
 import { CopyButton } from "@/components/ui/CopyButton";
-import { AuthGate } from "@/components/auth/AuthGate";
 
 function VerifyContent() {
   const searchParams = useSearchParams();
@@ -83,11 +82,7 @@ function VerifyContent() {
   };
 
   return (
-    <AuthGate
-      title="Forensic Verification Portal"
-      description="Authentication is required to run on-chain forensic hash comparisons and access institutional verification logs."
-    >
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-10">
         {/* Navigation Breadcrumb */}
         <div>
           <Link
@@ -264,7 +259,6 @@ function VerifyContent() {
         </div>
       )}
       </div>
-    </AuthGate>
   );
 }
 

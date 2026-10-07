@@ -306,6 +306,77 @@ All development phases are 100% complete, deployed, tested, and actively running
   - `frontend/components/dashboard/DashboardPage.tsx`
   - `PROGRESS.md`
 
+### Security Hardening & UX Polish: Landing Isolation, Faux Chrome Removal & Unified Demo Role Access
+- **Status:** COMPLETED
+- **Summary:**
+  - **Complete Landing Page & Navigation Isolation**:
+    - Removed `[Dashboard]` button from `Navbar.tsx`. The landing page header now strictly contains only public links (`Explore Gallery`, `How It Works`), token search, and `Sign In` / User account pill.
+    - Removed `Dashboard` link from `MobileDrawer.tsx` and `Footer.tsx`.
+    - Added automatic client-side redirection in `LandingPage.tsx` so authenticated curators are seamlessly kept inside `/dashboard` without ever seeing the landing page "Sign In" hero.
+  - **Removed Faux Browser Frame from Dashboard**:
+    - Completely deleted the top system frame (Mac window dots `🔴 🟡 🟢`, `artledger-app // environment: ethereum-local-node-31337`, and faux URL pill `https://app.artledger.io/provenance-journey`) from `DashboardPage.tsx`.
+    - The dashboard now cleanly begins with the modern SugarCRM / SaaS top navigation bar.
+  - **Unified AuthContext, DemoWallet, and useUserRole Permissions**:
+    - Synchronized `artledger_user` profile with `artledger_demo_persona_id` in `AuthContext.tsx` and `demoWallet.tsx`.
+    - Updated `useUserRole.ts` to directly read from `useAuth()`. Whenever a user is authenticated in demo mode or real Web3, `isConnected` is globally true across all components.
+    - Mapped privileges so that each of the 5 roles (`Artist`, `Gallery`, `Restorer`, `Appraiser`, `Admin`) possesses full access to their respective on-chain operations (`isArtist`, `isGallery`, `isRestorer`, `isAppraiser`, `isDefaultAdmin`).
+    - Updated `AuthGate.tsx` to recognize `useAuth()`, eliminating accidental lockouts or redirects to the landing page. In demo mode, if an action requires a different role, a 1-click role switch button is offered.
+    - Removed `AuthGate` wrapper from `VerifyPage` (`/verify`), enabling seamless forensic verification without auth barriers.
+  - **Embedded Forensic Cryptographic Verifier inside Dashboard Tab 4**:
+    - Transformed Tab 4 ("Forensic Verifier") from a redirect button into an embedded, interactive Forensic Cryptographic Comparator.
+    - Curators can select any of the 8 registered masterpieces, drag-and-drop or select high-resolution images, compute SHA-256 digests in real time, and view instant authentic / counterfeit verdict banners right inside the dashboard.
+- **Key Files Modified:**
+  - `frontend/components/layout/Navbar.tsx`
+  - `frontend/components/layout/MobileDrawer.tsx`
+  - `frontend/components/layout/Footer.tsx`
+  - `frontend/components/landing/LandingPage.tsx`
+  - `frontend/components/dashboard/DashboardPage.tsx`
+  - `frontend/hooks/useUserRole.ts`
+  - `frontend/lib/demoWallet.tsx`
+  - `frontend/context/AuthContext.tsx`
+  - `frontend/components/auth/AuthGate.tsx`
+  - `frontend/app/verify/page.tsx`
+  - `PROGRESS.md`
 
 
 
+
+
+
+
+### Feature: Warm Glassmorphic Redesign (Plus Jakarta Sans & Framer Motion & Recharts)
+- **Status:** COMPLETED
+- **Summary:**
+  - **Complete Design System Overhaul**:
+    - Hand-crafted Tailwind CSS utility system, zero component libraries (no shadcn, no MUI).
+    - Google Font **Plus Jakarta Sans** (weights 300, 400, 500, 600, 700, 800) configured globally.
+    - Warm palette applied: Core background `#F7F3F0`, primary text `#242633`, secondary `#686878`, borders `#EEE8E3`.
+    - Brand gradient: `linear-gradient(135deg, #DBBA95 0%, #FABED7 45%, #F07BAF 100%)` (Gold `#DBBA95` -> Blush `#FABED7` -> Rose `#F07BAF`).
+    - 3-tier glassmorphism system: `.glass-panel`, `.glass-panel-subtle`, `.glass-modal`.
+    - Active navigation pill: `.nav-pill-active` with brand gradient and custom shadow.
+    - Avatar user badges: circular with gradient border ring and `#49C98A` status dot.
+    - LIVE pulse indicator with `#49C98A` animated ping.
+  - **Component Overhaul**:
+    - **`globals.css` & `layout.tsx`**: CSS variables, scrollbars, and Google Fonts.
+    - **`LandingPage.tsx`**: Multi-layered radial gradients, blur spheres, live pulse indicator, and glass metrics.
+    - **`Navbar.tsx` & `Footer.tsx` & `MobileDrawer.tsx`**: Warm glass styling, rounded radii, and light gallery theme.
+    - **`AuthModal.tsx`**: `.glass-modal` surface, brand gradient buttons, 5-role picker pills, and Framer Motion transitions.
+    - **`DashboardPage.tsx`**: Recharts Donut Chart (`#49C98A`, `#F07BAF`, `#DBBA95`), Framer Motion tab transitions, warm glass cards, and status badges.
+    - **Role Views (`ArtistDashboardView`, `GalleryDashboardView`, `RestorerDashboardView`, `AppraiserDashboardView`, `AdminDashboardView`)**: Upgraded to `.glass-panel`, warm borders, and strict light mode.
+    - **`ArtworkCard.tsx`**: `.glass-panel`, rounded-3xl, and warm borders.
+- **Key Files Modified:**
+  - `frontend/styles/globals.css`
+  - `frontend/app/layout.tsx`
+  - `frontend/components/landing/LandingPage.tsx`
+  - `frontend/components/layout/Navbar.tsx`
+  - `frontend/components/layout/Footer.tsx`
+  - `frontend/components/layout/MobileDrawer.tsx`
+  - `frontend/components/auth/AuthModal.tsx`
+  - `frontend/components/dashboard/DashboardPage.tsx`
+  - `frontend/components/dashboard/ArtistDashboardView.tsx`
+  - `frontend/components/dashboard/GalleryDashboardView.tsx`
+  - `frontend/components/dashboard/RestorerDashboardView.tsx`
+  - `frontend/components/dashboard/AppraiserDashboardView.tsx`
+  - `frontend/components/dashboard/AdminDashboardView.tsx`
+  - `frontend/components/artwork/ArtworkCard.tsx`
+  - `PROGRESS.md`

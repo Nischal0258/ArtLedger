@@ -117,17 +117,34 @@ export function DemoWalletProvider({ children }: { children: React.ReactNode }) 
 
   useEffect(() => {
     setMounted(true);
-    try {
-      const savedId = localStorage.getItem(DEMO_STORAGE_KEY);
-      if (savedId) {
-        const found = DEMO_PERSONAS.find((p) => p.id === savedId);
-        if (found) {
-          setActivePersona(found);
+    const syncPersona = () => {
+      try {
+        let savedId = localStorage.getItem(DEMO_STORAGE_KEY);
+        if (!savedId) {
+          const storedUser = localStorage.getItem("artledger_user");
+          if (storedUser) {
+            const parsed = JSON.parse(storedUser);
+            if (parsed && parsed.role) {
+              savedId = parsed.role.toLowerCase();
+            }
+          }
         }
+        if (savedId) {
+          const found = DEMO_PERSONAS.find((p) => p.id === savedId.toLowerCase());
+          if (found) {
+            setActivePersona(found);
+          }
+        } else {
+          setActivePersona(null);
+        }
+      } catch {
+        // ignore localStorage errors in private mode
       }
-    } catch {
-      // ignore localStorage errors in private mode
-    }
+    };
+
+    syncPersona();
+    window.addEventListener("storage", syncPersona);
+    return () => window.removeEventListener("storage", syncPersona);
   }, []);
 
   const connectDemoWallet = (personaId: string = "admin") => {
