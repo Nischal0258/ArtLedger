@@ -30,7 +30,17 @@ import { isAddress } from "viem";
 import { toast } from "sonner";
 import { useWriteContract } from "wagmi";
 
-export function AdminDashboardView() {
+interface AdminDashboardViewProps {
+  onOpenVerifier?: () => void;
+  onOpenPortfolio?: () => void;
+  onOpenTimeline?: (tokenId: number) => void;
+}
+
+export function AdminDashboardView({
+  onOpenVerifier,
+  onOpenPortfolio,
+  onOpenTimeline,
+}: AdminDashboardViewProps = {}) {
   const { isConnected, isDefaultAdmin, roleHash, isDemoMode, switchDemoPersona } = useUserRole();
   const { executeDemoTransaction } = useDemoWallet();
 
@@ -317,9 +327,12 @@ export function AdminDashboardView() {
               <span>Administrative Tools</span>
             </h3>
             <div className="grid grid-cols-2 gap-3">
-              <Link
-                href="/verify"
-                className="p-4 rounded-2xl border border-[#EEE8E3] bg-white/80 hover:border-[#F07BAF] transition-all group flex flex-col justify-between shadow-xs"
+              <button
+                type="button"
+                onClick={() => {
+                  if (onOpenVerifier) onOpenVerifier();
+                }}
+                className="p-4 rounded-2xl border border-[#EEE8E3] bg-white/80 hover:border-[#F07BAF] transition-all group flex flex-col justify-between shadow-xs text-left cursor-pointer"
               >
                 <div className="space-y-1">
                   <p className="font-bold text-xs text-[#242633] group-hover:text-[#F07BAF]">
@@ -332,10 +345,13 @@ export function AdminDashboardView() {
                 <span className="text-[10px] font-bold text-[#F07BAF] flex items-center gap-1 mt-3">
                   Launch <ArrowRight className="w-3 h-3" />
                 </span>
-              </Link>
-              <Link
-                href="/explore"
-                className="p-4 rounded-2xl border border-[#EEE8E3] bg-white/80 hover:border-[#F07BAF] transition-all group flex flex-col justify-between shadow-xs"
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  if (onOpenPortfolio) onOpenPortfolio();
+                }}
+                className="p-4 rounded-2xl border border-[#EEE8E3] bg-white/80 hover:border-[#F07BAF] transition-all group flex flex-col justify-between shadow-xs text-left cursor-pointer"
               >
                 <div className="space-y-1">
                   <p className="font-bold text-xs text-[#242633] group-hover:text-[#F07BAF]">
@@ -348,7 +364,7 @@ export function AdminDashboardView() {
                 <span className="text-[10px] font-bold text-[#F07BAF] flex items-center gap-1 mt-3">
                   Browse <ArrowRight className="w-3 h-3" />
                 </span>
-              </Link>
+              </button>
             </div>
           </div>
         </div>
@@ -366,18 +382,25 @@ export function AdminDashboardView() {
               Complete on-chain index under administrative supervision
             </p>
           </div>
-          <Link
-            href="/explore"
-            className="text-xs font-bold text-[#F07BAF] hover:text-[#242633] flex items-center gap-1 transition-colors"
-          >
-            <span>View All</span>
-            <ExternalLink className="w-3.5 h-3.5" />
-          </Link>
+          {onOpenPortfolio && (
+            <button
+              type="button"
+              onClick={onOpenPortfolio}
+              className="text-xs font-bold text-[#F07BAF] hover:text-[#242633] flex items-center gap-1 transition-colors cursor-pointer"
+            >
+              <span>View All</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {MOCK_ARTWORKS.slice(0, 4).map((artwork) => (
-            <ArtworkCard key={artwork.tokenId} tokenId={artwork.tokenId} />
+            <ArtworkCard
+              key={artwork.tokenId}
+              tokenId={artwork.tokenId}
+              onSelect={onOpenTimeline}
+            />
           ))}
         </div>
       </div>

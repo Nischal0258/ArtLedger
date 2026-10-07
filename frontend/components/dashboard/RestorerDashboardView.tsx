@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import {
   Hammer,
   ShieldCheck,
@@ -15,14 +14,43 @@ import {
 } from "lucide-react";
 import { ArtworkCard } from "@/components/artwork/ArtworkCard";
 import { MOCK_ARTWORKS } from "@/lib/mockArtworks";
+import { toast } from "sonner";
 
-export function RestorerDashboardView() {
+interface RestorerDashboardViewProps {
+  onOpenVerifier?: () => void;
+  onOpenTimeline?: (tokenId: number) => void;
+  onOpenPortfolio?: () => void;
+  onLogRestorationAction?: (tokenId: number, treatmentType: string) => void;
+}
+
+export function RestorerDashboardView({
+  onOpenVerifier,
+  onOpenTimeline,
+  onOpenPortfolio,
+  onLogRestorationAction,
+}: RestorerDashboardViewProps) {
   const [selectedTokenId, setSelectedTokenId] = useState<number>(0);
 
   // Artworks with conservation or restoration history
   const restoredArtworks = MOCK_ARTWORKS.filter((a) =>
-    ["Salvator Mundi", "The Starry Night", "The Thinker (Le Penseur)", "Girl with a Pearl Earring"].includes(a.title)
+    [
+      "Salvator Mundi",
+      "The Starry Night",
+      "The Thinker (Le Penseur)",
+      "Girl with a Pearl Earring",
+      "The Night Watch",
+    ].includes(a.title)
   );
+
+  const handleAction = (treatmentType: string) => {
+    if (onLogRestorationAction) {
+      onLogRestorationAction(selectedTokenId, treatmentType);
+    } else {
+      toast.success(
+        `Restoration treatment "${treatmentType}" recorded on Ethereum for Token #${selectedTokenId}!`
+      );
+    }
+  };
 
   return (
     <div className="space-y-8 animate-fade-in">
@@ -43,14 +71,17 @@ export function RestorerDashboardView() {
             </div>
           </div>
 
-          <Link
-            href="/verify"
-            className="px-5 py-3 rounded-2xl brand-gradient text-[#242633] font-extrabold text-xs sm:text-sm shadow-[0_4px_16px_-3px_rgba(240,123,175,0.45)] flex items-center gap-2 transition-all hover:scale-[1.02]"
-          >
-            <FileSearch className="w-4 h-4 text-[#242633]" />
-            <span>Launch Forensic SHA-256 Verifier</span>
-            <ArrowRight className="w-4 h-4 text-[#242633]" />
-          </Link>
+          {onOpenVerifier && (
+            <button
+              type="button"
+              onClick={onOpenVerifier}
+              className="px-5 py-3 rounded-2xl brand-gradient text-[#242633] font-extrabold text-xs sm:text-sm shadow-[0_4px_16px_-3px_rgba(240,123,175,0.45)] flex items-center gap-2 transition-all hover:scale-[1.02] cursor-pointer"
+            >
+              <FileSearch className="w-4 h-4 text-[#242633]" />
+              <span>Launch Forensic SHA-256 Verifier</span>
+              <ArrowRight className="w-4 h-4 text-[#242633]" />
+            </button>
+          )}
         </div>
 
         <p className="text-xs sm:text-sm text-[#686878] max-w-3xl leading-relaxed">
@@ -81,78 +112,89 @@ export function RestorerDashboardView() {
       {/* Conservator Action Workflows */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Action 1: Pre-Restoration Forensic Check */}
-        <div className="p-6 rounded-3xl glass-panel space-y-4">
-          <div className="p-2.5 rounded-2xl bg-[#DBBA95]/20 text-[#855e30] w-fit">
-            <FileSearch className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="font-bold text-base text-[#242633]">
-              Pre-Treatment Forensic Check
-            </h3>
-            <p className="text-xs text-[#686878]">
-              Zero-Trust Authenticity Audit
+        <div className="p-6 rounded-3xl glass-panel space-y-4 flex flex-col justify-between">
+          <div className="space-y-3">
+            <div className="p-2.5 rounded-2xl bg-[#DBBA95]/20 text-[#855e30] w-fit">
+              <FileSearch className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-bold text-base text-[#242633]">
+                Pre-Treatment Forensic Check
+              </h3>
+              <p className="text-xs text-[#686878]">
+                Zero-Trust Authenticity Audit
+              </p>
+            </div>
+            <p className="text-xs text-[#686878] leading-relaxed">
+              Verify the physical artwork against the immutable genesis SHA-256 seal before admitting into the conservation cleanroom.
             </p>
           </div>
-          <p className="text-xs text-[#686878] leading-relaxed">
-            Verify the physical artwork against the immutable genesis SHA-256 seal before admitting into the conservation cleanroom.
-          </p>
-          <Link
-            href="/verify"
-            className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#F7F3F0] border border-[#EEE8E3] font-bold text-xs flex items-center justify-center gap-2 transition-colors text-[#242633] shadow-xs"
+          <button
+            type="button"
+            onClick={() => {
+              if (onOpenVerifier) onOpenVerifier();
+            }}
+            className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#F7F3F0] border border-[#EEE8E3] font-bold text-xs flex items-center justify-center gap-2 transition-colors text-[#242633] shadow-xs cursor-pointer"
           >
             <span>Open Forensic Verifier</span>
             <ArrowRight className="w-3.5 h-3.5 text-[#686878]" />
-          </Link>
+          </button>
         </div>
 
         {/* Action 2: Condition & Treatment Log */}
-        <div className="p-6 rounded-3xl glass-panel space-y-4">
-          <div className="p-2.5 rounded-2xl bg-[#49C98A]/15 text-[#1a7e4e] w-fit">
-            <Hammer className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="font-bold text-base text-[#242633]">
-              Log Restoration Treatment
-            </h3>
-            <p className="text-xs text-[#686878]">
-              Varnish, Relining & Pigments
+        <div className="p-6 rounded-3xl glass-panel space-y-4 flex flex-col justify-between">
+          <div className="space-y-3">
+            <div className="p-2.5 rounded-2xl bg-[#49C98A]/15 text-[#1a7e4e] w-fit">
+              <Hammer className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-bold text-base text-[#242633]">
+                Log Restoration Treatment
+              </h3>
+              <p className="text-xs text-[#686878]">
+                Varnish, Relining & Pigments
+              </p>
+            </div>
+            <p className="text-xs text-[#686878] leading-relaxed">
+              Record chemical treatments, aged varnish removal, structural consolidation, and non-destructive surface cleaning on-chain.
             </p>
           </div>
-          <p className="text-xs text-[#686878] leading-relaxed">
-            Record chemical treatments, aged varnish removal, structural consolidation, and non-destructive surface cleaning on-chain.
-          </p>
-          <Link
-            href={`/artwork/${selectedTokenId}`}
-            className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#F7F3F0] border border-[#EEE8E3] font-bold text-xs flex items-center justify-center gap-2 transition-colors text-[#242633] shadow-xs"
+          <button
+            type="button"
+            onClick={() => handleAction("Varnish Stabilization & Cleaning")}
+            className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#F7F3F0] border border-[#EEE8E3] font-bold text-xs flex items-center justify-center gap-2 transition-colors text-[#242633] shadow-xs cursor-pointer"
           >
             <span>Record Treatment on #{selectedTokenId}</span>
             <ArrowRight className="w-3.5 h-3.5 text-[#686878]" />
-          </Link>
+          </button>
         </div>
 
         {/* Action 3: Micro-spectroscopy & Reflectography */}
-        <div className="p-6 rounded-3xl glass-panel space-y-4">
-          <div className="p-2.5 rounded-2xl bg-[#D0BCE1]/40 text-[#5e4479] w-fit">
-            <Microscope className="w-5 h-5" />
-          </div>
-          <div>
-            <h3 className="font-bold text-base text-[#242633]">
-              Multi-Spectral Reflectography
-            </h3>
-            <p className="text-xs text-[#686878]">
-              Infrared & X-Ray Diagnostics
+        <div className="p-6 rounded-3xl glass-panel space-y-4 flex flex-col justify-between">
+          <div className="space-y-3">
+            <div className="p-2.5 rounded-2xl bg-[#D0BCE1]/40 text-[#5e4479] w-fit">
+              <Microscope className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-bold text-base text-[#242633]">
+                Multi-Spectral Reflectography
+              </h3>
+              <p className="text-xs text-[#686878]">
+                Infrared & X-Ray Diagnostics
+              </p>
+            </div>
+            <p className="text-xs text-[#686878] leading-relaxed">
+              Attach high-resolution infrared reflectography scans and pigment strata analysis reports directly to the token timeline.
             </p>
           </div>
-          <p className="text-xs text-[#686878] leading-relaxed">
-            Attach high-resolution infrared reflectography scans and pigment strata analysis reports directly to the token timeline.
-          </p>
-          <Link
-            href={`/artwork/${selectedTokenId}`}
-            className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#F7F3F0] border border-[#EEE8E3] font-bold text-xs flex items-center justify-center gap-2 transition-colors text-[#242633] shadow-xs"
+          <button
+            type="button"
+            onClick={() => handleAction("Infrared Spectral Reflectography")}
+            className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#F7F3F0] border border-[#EEE8E3] font-bold text-xs flex items-center justify-center gap-2 transition-colors text-[#242633] shadow-xs cursor-pointer"
           >
             <span>Attach Spectral Scan on #{selectedTokenId}</span>
             <ArrowRight className="w-3.5 h-3.5 text-[#686878]" />
-          </Link>
+          </button>
         </div>
       </div>
 
@@ -163,12 +205,15 @@ export function RestorerDashboardView() {
             <Hammer className="w-4 h-4 text-[#49C98A]" />
             <span>Masterpieces Under Laboratory Care ({restoredArtworks.length})</span>
           </h3>
-          <Link
-            href="/explore"
-            className="text-xs font-bold text-[#F07BAF] hover:text-[#242633] transition-colors"
-          >
-            Browse All Artworks →
-          </Link>
+          {onOpenPortfolio && (
+            <button
+              type="button"
+              onClick={onOpenPortfolio}
+              className="text-xs font-bold text-[#F07BAF] hover:text-[#242633] transition-colors cursor-pointer"
+            >
+              Browse All Artworks →
+            </button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -180,7 +225,7 @@ export function RestorerDashboardView() {
                 selectedTokenId === a.tokenId ? "ring-2 ring-[#49C98A] scale-[1.01]" : ""
               }`}
             >
-              <ArtworkCard tokenId={a.tokenId} />
+              <ArtworkCard tokenId={a.tokenId} onSelect={onOpenTimeline} />
             </div>
           ))}
         </div>

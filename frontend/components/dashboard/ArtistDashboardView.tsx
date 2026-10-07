@@ -1,7 +1,6 @@
 "use client";
 
 import React, { useState } from "react";
-import Link from "next/link";
 import {
   Palette,
   Sparkles,
@@ -18,14 +17,31 @@ import { MOCK_ARTWORKS } from "@/lib/mockArtworks";
 import { computeSHA256 } from "@/lib/hash";
 import { toast } from "sonner";
 
-export function ArtistDashboardView() {
+interface ArtistDashboardViewProps {
+  onOpenRegister?: () => void;
+  onOpenTimeline?: (tokenId: number) => void;
+  onOpenPortfolio?: () => void;
+}
+
+export function ArtistDashboardView({
+  onOpenRegister,
+  onOpenTimeline,
+  onOpenPortfolio,
+}: ArtistDashboardViewProps) {
   const [testFile, setTestFile] = useState<File | null>(null);
   const [testHash, setTestHash] = useState<string>("");
   const [isHashing, setIsHashing] = useState<boolean>(false);
 
   // Artist's minted creations
   const artistArtworks = MOCK_ARTWORKS.filter((a) =>
-    ["Girl with a Pearl Earring", "The Starry Night", "The Kiss (Der Kuss)", "The Thinker (Le Penseur)"].includes(a.title)
+    [
+      "Girl with a Pearl Earring",
+      "The Starry Night",
+      "The Kiss (Der Kuss)",
+      "The Thinker (Le Penseur)",
+      "The Night Watch",
+      "Composition VIII",
+    ].includes(a.title)
   );
 
   const handleFileHash = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -63,14 +79,17 @@ export function ArtistDashboardView() {
             </div>
           </div>
 
-          <Link
-            href="/mint"
-            className="px-5 py-3 rounded-2xl brand-gradient text-[#242633] font-extrabold text-xs sm:text-sm shadow-[0_4px_16px_-3px_rgba(240,123,175,0.45)] flex items-center gap-2 transition-all hover:scale-[1.02]"
-          >
-            <Sparkles className="w-4 h-4 text-[#242633]" />
-            <span>Launch Artwork Registration Wizard</span>
-            <ArrowRight className="w-4 h-4 text-[#242633]" />
-          </Link>
+          {onOpenRegister && (
+            <button
+              type="button"
+              onClick={onOpenRegister}
+              className="px-5 py-3 rounded-2xl brand-gradient text-[#242633] font-extrabold text-xs sm:text-sm shadow-[0_4px_16px_-3px_rgba(240,123,175,0.45)] flex items-center gap-2 transition-all hover:scale-[1.02] cursor-pointer"
+            >
+              <Sparkles className="w-4 h-4 text-[#242633]" />
+              <span>Launch Artwork Registration Wizard</span>
+              <ArrowRight className="w-4 h-4 text-[#242633]" />
+            </button>
+          )}
         </div>
 
         <p className="text-xs sm:text-sm text-[#686878] max-w-3xl leading-relaxed">
@@ -101,30 +120,35 @@ export function ArtistDashboardView() {
       {/* Artist Studio Tools */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Tool 1: Registration Portal */}
-        <div className="p-6 rounded-3xl glass-panel space-y-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl brand-gradient text-[#242633] shadow-xs">
-              <Upload className="w-5 h-5" />
+        <div className="p-6 rounded-3xl glass-panel space-y-4 flex flex-col justify-between">
+          <div className="space-y-3">
+            <div className="flex items-center gap-3">
+              <div className="p-2.5 rounded-2xl brand-gradient text-[#242633] shadow-xs">
+                <Upload className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-bold text-base text-[#242633]">
+                  Genesis Minting Studio
+                </h3>
+                <p className="text-xs text-[#686878]">
+                  Direct on-chain artwork registration
+                </p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-bold text-base text-[#242633]">
-                Genesis Minting Wizard
-              </h3>
-              <p className="text-xs text-[#686878]">
-                Full 4-step registration pipeline
-              </p>
-            </div>
+            <p className="text-xs text-[#686878] leading-relaxed">
+              Attach high-resolution digital photograph, auto-generate SHA-256 digest, upload IPFS metadata, and mint immutable ERC-721 token on Ethereum.
+            </p>
           </div>
-          <p className="text-xs text-[#686878] leading-relaxed">
-            Attach high-resolution digital photograph, auto-generate SHA-256 digest, upload IPFS metadata, and mint immutable ERC-721 token on Ethereum.
-          </p>
-          <Link
-            href="/mint"
-            className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#F7F3F0] border border-[#EEE8E3] font-bold text-xs flex items-center justify-center gap-2 transition-colors text-[#242633] shadow-xs"
-          >
-            <span>Open Registration Form</span>
-            <ArrowRight className="w-3.5 h-3.5 text-[#686878]" />
-          </Link>
+          {onOpenRegister && (
+            <button
+              type="button"
+              onClick={onOpenRegister}
+              className="w-full py-2.5 px-4 rounded-2xl bg-white hover:bg-[#F7F3F0] border border-[#EEE8E3] font-bold text-xs flex items-center justify-center gap-2 transition-colors text-[#242633] shadow-xs cursor-pointer"
+            >
+              <span>Open Registration Form</span>
+              <ArrowRight className="w-3.5 h-3.5 text-[#686878]" />
+            </button>
+          )}
         </div>
 
         {/* Tool 2: Client-side SHA-256 Digest Tester */}
@@ -171,17 +195,20 @@ export function ArtistDashboardView() {
             <Sparkles className="w-4 h-4 text-[#F07BAF]" />
             <span>My Registered Masterpieces ({artistArtworks.length})</span>
           </h3>
-          <Link
-            href="/explore"
-            className="text-xs font-bold text-[#F07BAF] hover:text-[#242633] transition-colors"
-          >
-            View All in Public Explorer →
-          </Link>
+          {onOpenPortfolio && (
+            <button
+              type="button"
+              onClick={onOpenPortfolio}
+              className="text-xs font-bold text-[#F07BAF] hover:text-[#242633] transition-colors cursor-pointer"
+            >
+              View All in Registry →
+            </button>
+          )}
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {artistArtworks.map((a) => (
-            <ArtworkCard key={a.tokenId} tokenId={a.tokenId} />
+            <ArtworkCard key={a.tokenId} tokenId={a.tokenId} onSelect={onOpenTimeline} />
           ))}
         </div>
       </div>
